@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "future"
 version = "0.1.0"
@@ -5,5 +9,15 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
 dependencies = [
+    "numpy>=2.2.6",
+    "pytest>=9.0.3",
+    "pyts>=0.13.0",
     "torch>=2.11.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
