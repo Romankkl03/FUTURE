@@ -1,0 +1,1 @@
+{"experiment_name": "E1_raw_cnn_baseline", "modalities": ["raw"], "fusion": null, "encoder": "1D CNN", "loss": 0.1982240783671538, "accuracy": 0.9272727272727272, "macro_f1": 0.9271119250688502, "weighted_f1": 0.9272208555940572, "confusion_matrix": [[643, 38], [58, 581]]}
