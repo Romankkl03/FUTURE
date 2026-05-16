@@ -641,7 +641,8 @@ def hurst_exponent_torch(X: torch.Tensor, axis: int = -1) -> torch.Tensor:
         X_T = y - t * ave_t[:, i].unsqueeze(1)
         R_T[:, i] = X_T[:, :i + 1].amax(dim=-1) - X_T[:, :i + 1].amin(dim=-1)
     RS = R_T / (S_T + 1e-12)
-    RS = torch.log(RS[:, 1:])
+    RS = torch.log(RS[:, 1:].clamp_min(1e-12))
+    RS = torch.nan_to_num(RS, nan=0.0, posinf=0.0, neginf=0.0)
     n = torch.log(t[:, 1:]).squeeze(0)
 
     ones = torch.ones_like(n)
