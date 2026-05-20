@@ -1,4 +1,4 @@
-from .data import (
+from .download_data import (
     TSLoader,
     TimeSeriesDatasetSplit,
     load_dataset,
