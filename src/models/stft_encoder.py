@@ -16,7 +16,7 @@ class STFTConvBlock(nn.Module):
             nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(out_channels),
             nn.GELU(),
-            nn.MaxPool2d(kernel_size=2),
+            nn.MaxPool2d(kernel_size=2, ceil_mode=True),
             nn.Dropout2d(dropout),
         )
 

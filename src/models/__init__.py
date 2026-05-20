@@ -13,6 +13,7 @@ from .raw_stats_concat import ConcatFusionMLP, RawStatsConcatClassifier
 from .raw_stft_concat import RawSTFTConcatClassifier
 from .stft_encoder import STFTClassifier, STFTEncoder
 from .stats_encoder import MLPBlock, StatisticalEncoder, StatisticalMLPClassifier
+from .training import single_input_batch, train_with_batch_adapter, two_input_batch
 
 __all__ = [
     "CNN_Encoder",
@@ -34,4 +35,7 @@ __all__ = [
     "STFTEncoder",
     "StatisticalEncoder",
     "StatisticalMLPClassifier",
+    "single_input_batch",
+    "train_with_batch_adapter",
+    "two_input_batch",
 ]

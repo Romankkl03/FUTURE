@@ -118,3 +118,5 @@ class StatisticalMLPClassifier(nn.Module):
         x_stat: [batch, num_features]
         """
         return self.net(x_stat)
+
+
