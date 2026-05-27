@@ -60,7 +60,7 @@ from src.models import (  # noqa: E402
     train_with_batch_adapter,
     two_input_batch,
 )
-from src.tools import get_device, set_seed  # noqa: E402
+from src.tools import get_device, minmax_scale_pair, set_seed, z_normalize_pair  # noqa: E402
 
 
 DATASET_NAMES = ("ECG5000", "MedicalImages", "FacesUCR", "SwedishLeaf")
@@ -76,6 +76,7 @@ GAF_PARAMS = {
     "method": "summation",
     "overlapping": True,
     "image_size": 0.25,
+    "sample_range": None,
 }
 
 MTF_PARAMS = {
@@ -121,6 +122,8 @@ class DatasetContext:
     y_test: torch.Tensor
     X_train_2d: torch.Tensor
     X_test_2d: torch.Tensor
+    X_train_scaled_2d: torch.Tensor
+    X_test_scaled_2d: torch.Tensor
     device: torch.device
     feature_batch_size: int
     image_batch_size: int
@@ -145,6 +148,7 @@ class ImageSpec:
     transform_params: dict[str, Any]
     classifier_cls: type[nn.Module]
     raw_classifier_cls: type[nn.Module]
+    input_getter: Callable[[DatasetContext], tuple[torch.Tensor, torch.Tensor]]
     use_log1p: bool = False
 
 
@@ -175,10 +179,14 @@ def build_dataset_context(
         lr=lr,
         seed=seed,
     )
-    X_train = torch.from_numpy(dataset.X_train).float()
+    X_train_raw = torch.from_numpy(dataset.X_train).float()
     y_train = torch.from_numpy(dataset.y_train).long()
-    X_test = torch.from_numpy(dataset.X_test).float()
+    X_test_raw = torch.from_numpy(dataset.X_test).float()
     y_test = torch.from_numpy(dataset.y_test).long()
+    X_train, X_test = z_normalize_pair(X_train_raw, X_test_raw)
+    X_train_2d = as_univariate_feature_tensor(X_train)
+    X_test_2d = as_univariate_feature_tensor(X_test)
+    X_train_scaled_2d, X_test_scaled_2d = minmax_scale_pair(X_train_2d, X_test_2d)
 
     return DatasetContext(
         dataset_name=dataset_name,
@@ -188,8 +196,10 @@ def build_dataset_context(
         y_train=y_train,
         X_test=X_test,
         y_test=y_test,
-        X_train_2d=as_univariate_feature_tensor(X_train),
-        X_test_2d=as_univariate_feature_tensor(X_test),
+        X_train_2d=X_train_2d,
+        X_test_2d=X_test_2d,
+        X_train_scaled_2d=X_train_scaled_2d,
+        X_test_scaled_2d=X_test_scaled_2d,
         device=device,
         feature_batch_size=feature_batch_size,
         image_batch_size=image_batch_size,
@@ -366,10 +376,11 @@ def run_raw_stats(context: DatasetContext) -> dict[str, Any]:
 
 def run_image(context: DatasetContext, image_spec: ImageSpec) -> dict[str, Any]:
     transformer = image_spec.transformer_cls(image_spec.transform_params)
+    X_train_image, X_test_image = image_spec.input_getter(context)
     train_loader, test_loader, transform_shape, cnn_shape = make_prepared_image_loaders(
         transformer,
-        context.X_train_2d,
-        context.X_test_2d,
+        X_train_image,
+        X_test_image,
         context.y_train,
         context.y_test,
         batch_size=context.params["batch_size"],
@@ -406,12 +417,13 @@ def run_image(context: DatasetContext, image_spec: ImageSpec) -> dict[str, Any]:
 
 def run_raw_image(context: DatasetContext, image_spec: ImageSpec) -> dict[str, Any]:
     transformer = image_spec.transformer_cls(image_spec.transform_params)
+    X_train_image, X_test_image = image_spec.input_getter(context)
     train_loader, test_loader, transform_shape, cnn_shape = make_prepared_raw_image_loaders(
         transformer,
         context.X_train,
         context.X_test,
-        context.X_train_2d,
-        context.X_test_2d,
+        X_train_image,
+        X_test_image,
         context.y_train,
         context.y_test,
         batch_size=context.params["batch_size"],
@@ -461,11 +473,27 @@ def make_raw_image_runner(image_spec: ImageSpec) -> Callable[[DatasetContext], d
     return runner
 
 
+def normalized_image_inputs(context: DatasetContext) -> tuple[torch.Tensor, torch.Tensor]:
+    return context.X_train_2d, context.X_test_2d
+
+
+def scaled_image_inputs(context: DatasetContext) -> tuple[torch.Tensor, torch.Tensor]:
+    return context.X_train_scaled_2d, context.X_test_scaled_2d
+
+
 def make_architecture_specs() -> list[ArchitectureSpec]:
     image_specs = (
-        ImageSpec("GAF", GAF, GAF_PARAMS, GAFClassifier, RawGAFConcatClassifier),
-        ImageSpec("MTF", MTF, MTF_PARAMS, MTFClassifier, RawMTFConcatClassifier),
-        ImageSpec("STFT", STFTSpectrogram, STFT_PARAMS, STFTClassifier, RawSTFTConcatClassifier, use_log1p=True),
+        ImageSpec("GAF", GAF, GAF_PARAMS, GAFClassifier, RawGAFConcatClassifier, scaled_image_inputs),
+        ImageSpec("MTF", MTF, MTF_PARAMS, MTFClassifier, RawMTFConcatClassifier, normalized_image_inputs),
+        ImageSpec(
+            "STFT",
+            STFTSpectrogram,
+            STFT_PARAMS,
+            STFTClassifier,
+            RawSTFTConcatClassifier,
+            normalized_image_inputs,
+            use_log1p=True,
+        ),
     )
     image_architectures = [ArchitectureSpec(spec.transform_name, make_image_runner(spec)) for spec in image_specs]
     raw_image_architectures = [

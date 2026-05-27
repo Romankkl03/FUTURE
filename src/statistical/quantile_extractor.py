@@ -21,11 +21,11 @@ from statistical.stat_features import (
     max_torch,
     mean_ema_torch,
     mean_moving_median_torch,
-    mean_ptp_distance_torch,
+    mean_ptp_distance_torch_normalized,
     mean_torch,
     median_torch,
     min_torch,
-    n_peaks_torch,
+    n_peaks_torch_normalized,
     pfd_torch,
     ptp_amp_torch,
     q25_torch,
@@ -40,9 +40,7 @@ from statistical.stat_features import (
 )
 
 STAT_METHODS_TORCH: dict[str, Callable[..., Any]] = {
-    "mean_": mean_torch,
     "median_": median_torch,
-    "std_": std_torch,
     "max_": max_torch,
     "min_": min_torch,
     "q5_": q5_torch,
@@ -54,16 +52,15 @@ STAT_METHODS_TORCH: dict[str, Callable[..., Any]] = {
 STAT_METHODS_GLOBAL_TORCH: dict[str, Callable[..., Any]] = {
     "skewness_": skewness_torch,
     "kurtosis_": kurtosis_torch,
-    "n_peaks_": n_peaks_torch,
+    "n_peaks_": n_peaks_torch_normalized,
     "slope_": slope_torch,
     "ben_corr_": ben_corr_torch,
     "interquartile_range_": interquantile_range_torch,
     "energy_": energy_torch,
     "cross_rate_": zero_crossing_rate_torch,
     "autocorrelation_": autocorrelation_torch,
-    # "shannon_entropy_": shannon_entropy_torch,
     "ptp_amplitude_": ptp_amp_torch,
-    "mean_ptp_distance_": mean_ptp_distance_torch,
+    "mean_ptp_distance_": mean_ptp_distance_torch_normalized,
     "crest_factor_": crest_factor_torch,
     "mean_ema_": mean_ema_torch,
     "mean_moving_median_": mean_moving_median_torch,
@@ -72,6 +69,7 @@ STAT_METHODS_GLOBAL_TORCH: dict[str, Callable[..., Any]] = {
     "hurst_exponent_": hurst_exponent_torch,
     "petrosian_fractal_dimension_": pfd_torch,
 }
+# "shannon_entropy_": shannon_entropy_torch,
 
 
 def _as_float_tensor_on_device(value: Any, *, device: torch.device, dtype: torch.dtype) -> torch.Tensor:

@@ -123,8 +123,8 @@ def prepare_representations(context: DatasetContext) -> PreparedRepresentations:
     )
     X_train_gaf, X_test_gaf, gaf_transform_shape, gaf_cnn_shape = prepare_image_tensors(
         GAF(GAF_PARAMS),
-        context.X_train_2d,
-        context.X_test_2d,
+        context.X_train_scaled_2d,
+        context.X_test_scaled_2d,
         image_batch_size=context.image_batch_size,
     )
     X_train_mtf, X_test_mtf, mtf_transform_shape, mtf_cnn_shape = prepare_image_tensors(

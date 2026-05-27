@@ -12,6 +12,7 @@ from statistical.quantile_extractor import (
     STAT_METHODS_TORCH,
     TorchQuantileExtractor,
 )
+from tools.normilization import log1p_nonnegative
 
 IMAGE_LOG1P_TRANSFORMS = frozenset({"STFT", STFTSpectrogram})
 
@@ -343,7 +344,7 @@ def standardize_images_from_train(
 
 
 def apply_image_log1p(X_train_img: torch.Tensor, X_test_img: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-    return torch.log1p(X_train_img.clamp_min(0)), torch.log1p(X_test_img.clamp_min(0))
+    return log1p_nonnegative(X_train_img), log1p_nonnegative(X_test_img)
 
 
 def prepare_image_tensors(

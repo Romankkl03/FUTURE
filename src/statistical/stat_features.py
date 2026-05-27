@@ -143,7 +143,7 @@ def kurtosis_torch(x: torch.Tensor, axis=-1, fisher=True):
     return kurt
 
 
-def n_peaks_torch(X: torch.Tensor, axis=-1):
+def n_peaks_torch_normalized(X: torch.Tensor, axis=-1):
     """
     A peak is defined as a point where the signal transitions from increasing to decreasing.
     The function identifies peaks by analyzing sign changes in the first differences of the signal.
@@ -169,13 +169,14 @@ def n_peaks_torch(X: torch.Tensor, axis=-1):
     s[s == 0] = 1
     dd = torch.diff(s, axis=-1)
     n_peaks = torch.count_nonzero(dd == -2, axis=-1)
+    n_peaks = n_peaks / x.shape[-1]
     if X.ndim > 2:
-        n_peaks.reshape(X.shape[0], X.shape[1])
+        return n_peaks.reshape(X.shape[0], X.shape[1])
     else:
         return n_peaks.item() if n_peaks.numel() == 1 else n_peaks
 
 
-def mean_ptp_distance_torch(X: torch.Tensor, axis=-1):
+def mean_ptp_distance_torch_normalized(X: torch.Tensor, axis=-1):
     """
     Peaks are identified as points where the signal transitions from increasing to decreasing.
     The function calculates the average distance (in samples) between these peaks.
@@ -220,8 +221,9 @@ def mean_ptp_distance_torch(X: torch.Tensor, axis=-1):
     diff_peaks = torch.diff(peak_indices, dim=-1)
     diff_peaks[diff_peaks < 0] = 0
     mean_dist = diff_peaks.sum(dim=-1) / count_peaks.float()
+    mean_dist = mean_dist / x.shape[-1]
     if X.ndim > 2:
-        mean_dist.reshape(X.shape[0], X.shape[1])
+        return mean_dist.reshape(X.shape[0], X.shape[1])
     else:
         return mean_dist.item() if mean_dist.numel() == 1 else mean_dist
 
@@ -415,7 +417,7 @@ def shannon_entropy_torch(X: torch.Tensor, axis=None):
     elif X.ndim > 2:
         x = X.reshape(-1, X.shape[-1])
     else:
-        x = X.clone()
+        x = X
     B, N = x.shape
     x_sorted, _ = torch.sort(x, dim=axis)
     new_group = torch.cat([
