@@ -5,9 +5,20 @@ from .cnn_encoder import (
     RawCNNClassifier,
     RawTimeSeriesEncoder,
 )
+from .bottleneck_modified import (
+    ContextOnlyResidualBottleneckClassifier,
+    RawConditionedBottleneckRepresentationEncoder,
+    RawConditionedContextBottleneckClassifier,
+    RawResidualBottleneckClassifier,
+)
 from .gaf_encoder import GAFClassifier, GAFEncoder
 from .mtf_encoder import MTFClassifier, MTFEncoder
 from .multi_concat import MultiConcatFusionMLP
+from .multimodal_bottleneck_fusion import (
+    BottleneckLatentBlock,
+    BottleneckRepresentationEncoder,
+    RawStatsGAFSTFTBottleneckClassifier,
+)
 from .multimodal_film_fusion import FiLMFusion, RawFiLMStatsGAFSTFTClassifier
 from .multimodal_gated_fusion import (
     MultiModalGatedFusion,
@@ -35,6 +46,9 @@ __all__ = [
     "ClassificationHead",
     "ConcatFusionMLP",
     "ConvBlock1D",
+    "BottleneckLatentBlock",
+    "BottleneckRepresentationEncoder",
+    "ContextOnlyResidualBottleneckClassifier",
     "GAFClassifier",
     "GAFEncoder",
     "MTFClassifier",
@@ -50,7 +64,11 @@ __all__ = [
     "RawGAFConcatClassifier",
     "RawGatedStatsGAFSTFTClassifier",
     "RawMTFConcatClassifier",
+    "RawConditionedBottleneckRepresentationEncoder",
+    "RawConditionedContextBottleneckClassifier",
+    "RawResidualBottleneckClassifier",
     "RawStatsGAFMTFSTFTGatedClassifier",
+    "RawStatsGAFSTFTBottleneckClassifier",
     "RawStatsGAFConcatClassifier",
     "RawStatsGAFMTFSTFTConcatClassifier",
     "RawStatsGAFSTFTConcatClassifier",
