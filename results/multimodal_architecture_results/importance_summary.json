@@ -1,0 +1,1084 @@
+{
+  "rows": [
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.3214058578014374,
+      "std": 0.1314029097557068
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.678594172000885,
+      "std": 0.1314029097557068
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.395997554063797,
+      "std": 0.10766565054655075
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.6040024161338806,
+      "std": 0.10766565054655075
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.15933085978031158,
+      "std": 0.10690370202064514
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.5854771137237549,
+      "std": 0.2136642336845398
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.25519201159477234,
+      "std": 0.10895911604166031
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.25824689865112305,
+      "std": 0.17998062074184418
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.18956871330738068,
+      "std": 0.017412202432751656
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.1852828562259674,
+      "std": 0.0319119431078434
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.3669015169143677,
+      "std": 0.1696627289056778
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_vector_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.2826029062271118,
+      "std": 0.35430270433425903
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_vector_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.2641838490962982,
+      "std": 0.3043639361858368
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.35336029529571533,
+      "std": 0.3844132721424103
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.321798175573349,
+      "std": 0.38080108165740967
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_scalar_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.6572643518447876,
+      "std": 0.15693725645542145
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_scalar_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.6666916012763977,
+      "std": 0.3166440427303314
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.6067363023757935,
+      "std": 0.18147161602973938
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.8402522802352905,
+      "std": 0.11884772032499313
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4742323160171509,
+      "std": 0.07204286754131317
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.4582846760749817,
+      "std": 0.09177923947572708
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4649415612220764,
+      "std": 0.08639828860759735
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.38986045122146606,
+      "std": 0.14234225451946259
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.45393362641334534,
+      "std": 0.10038244724273682
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.4288218915462494,
+      "std": 0.11673533916473389
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4606642723083496,
+      "std": 0.09277674555778503
+    },
+    {
+      "dataset_name": "ECG5000",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.423748642206192,
+      "std": 0.1115812137722969
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.599679708480835,
+      "std": 0.1258167177438736
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.40032026171684265,
+      "std": 0.1258167177438736
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.478419691324234,
+      "std": 0.2022688239812851
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.5215802788734436,
+      "std": 0.2022688239812851
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.3523804247379303,
+      "std": 0.15134909749031067
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.3655253052711487,
+      "std": 0.15858499705791473
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.2820942997932434,
+      "std": 0.1289629340171814
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.1350286453962326,
+      "std": 0.10005918145179749
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.37279820442199707,
+      "std": 0.1626012921333313
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.3062685430049896,
+      "std": 0.13131657242774963
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.1859046071767807,
+      "std": 0.15739934146404266
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_vector_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.34164947271347046,
+      "std": 0.2683495581150055
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_vector_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.32992488145828247,
+      "std": 0.28005337715148926
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.3571142852306366,
+      "std": 0.32159197330474854
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.38055965304374695,
+      "std": 0.3346002399921417
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_scalar_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.33610114455223083,
+      "std": 0.2710776925086975
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_scalar_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.45644184947013855,
+      "std": 0.2078613042831421
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.6805501580238342,
+      "std": 0.1911233812570572
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.8044114112854004,
+      "std": 0.17119643092155457
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.445536732673645,
+      "std": 0.10640234500169754
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.24750860035419464,
+      "std": 0.14281433820724487
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4382556974887848,
+      "std": 0.11345931887626648
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.24833962321281433,
+      "std": 0.15454337000846863
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.41495850682258606,
+      "std": 0.1280914843082428
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.3768063187599182,
+      "std": 0.141941636800766
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4236864447593689,
+      "std": 0.12253507971763611
+    },
+    {
+      "dataset_name": "MedicalImages",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.38222968578338623,
+      "std": 0.13896743953227997
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.5548504590988159,
+      "std": 0.20713379979133606
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.4451495110988617,
+      "std": 0.20713379979133606
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.7199782133102417,
+      "std": 0.13814975321292877
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.2800218164920807,
+      "std": 0.13814975321292877
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.39508765935897827,
+      "std": 0.21820709109306335
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.3375774025917053,
+      "std": 0.1353338658809662
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.2673349678516388,
+      "std": 0.22942396998405457
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.2868193984031677,
+      "std": 0.1849851906299591
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.3479437828063965,
+      "std": 0.18063536286354065
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.11682457476854324,
+      "std": 0.1658690869808197
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.24841225147247314,
+      "std": 0.2361331731081009
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_vector_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.41023027896881104,
+      "std": 0.25027552247047424
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_vector_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.42146241664886475,
+      "std": 0.20102842152118683
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.46821972727775574,
+      "std": 0.3032210171222687
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.4550568461418152,
+      "std": 0.2903192937374115
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_scalar_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.3185262084007263,
+      "std": 0.2384050190448761
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_scalar_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.21905601024627686,
+      "std": 0.23585356771945953
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.8752375841140747,
+      "std": 0.21174399554729462
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.8636969327926636,
+      "std": 0.24867944419384003
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4303032159805298,
+      "std": 0.11606283485889435
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.26500406861305237,
+      "std": 0.16164438426494598
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4327337145805359,
+      "std": 0.11419873684644699
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.13503840565681458,
+      "std": 0.13216018676757812
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.37296196818351746,
+      "std": 0.13907577097415924
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.30049940943717957,
+      "std": 0.14195431768894196
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.3940025866031647,
+      "std": 0.13229678571224213
+    },
+    {
+      "dataset_name": "FacesUCR",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.305844247341156,
+      "std": 0.144893079996109
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.5970622301101685,
+      "std": 0.18636903166770935
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.4029378294944763,
+      "std": 0.18636903166770935
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.6735458970069885,
+      "std": 0.21472710371017456
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_GAF",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.32645416259765625,
+      "std": 0.21472710371017456
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.3861185610294342,
+      "std": 0.15230074524879456
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.4198066294193268,
+      "std": 0.13261078298091888
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.1940748542547226,
+      "std": 0.12373736500740051
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "raw",
+      "value": 0.23123279213905334,
+      "std": 0.10792656242847443
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stats",
+      "value": 0.31247326731681824,
+      "std": 0.08277235180139542
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "gaf",
+      "value": 0.1619383990764618,
+      "std": 0.07951033115386963
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "gated_fusion__raw_stats_GAF_STFT",
+      "fusion": "gated_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gate",
+      "target": "stft",
+      "value": 0.29435551166534424,
+      "std": 0.09216318279504776
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_vector_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.3142663240432739,
+      "std": 0.23891346156597137
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_vector_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.2508411705493927,
+      "std": 0.2444048970937729
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.3117145597934723,
+      "std": 0.3369120955467224
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_vector_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_vector_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.3362377882003784,
+      "std": 0.3372322618961334
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_scalar_alpha__raw_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.1380254030227661,
+      "std": 0.18913087248802185
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_scalar_alpha__raw_GAF",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_GAF",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.23178032040596008,
+      "std": 0.20082026720046997
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.7461095452308655,
+      "std": 0.2687285840511322
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "residual_gated_fusion_scalar_alpha__raw_stats_GAF_STFT",
+      "fusion": "residual_gated_fusion_scalar_alpha",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "alpha_abs_mean",
+      "target": "residual_delta",
+      "value": 0.6708138585090637,
+      "std": 0.37093013525009155
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4446859359741211,
+      "std": 0.10766826570034027
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.19597168266773224,
+      "std": 0.12429139763116837
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.4395905137062073,
+      "std": 0.11157381534576416
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_GAF",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_GAF",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.23542006313800812,
+      "std": 0.1583811640739441
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.42542994022369385,
+      "std": 0.12079014629125595
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_stats_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.38166314363479614,
+      "std": 0.14030180871486664
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "gamma_abs_mean",
+      "target": "raw_modulation",
+      "value": 0.42231324315071106,
+      "std": 0.12372146546840668
+    },
+    {
+      "dataset_name": "SwedishLeaf",
+      "method": "film_fusion__raw_stats_GAF_STFT",
+      "fusion": "film_fusion",
+      "modality_combo": "raw_stats_GAF_STFT",
+      "coefficient": "beta_abs_mean",
+      "target": "raw_shift",
+      "value": 0.39354655146598816,
+      "std": 0.13327421247959137
+    }
+  ]
+}

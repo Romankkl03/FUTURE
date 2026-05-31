@@ -8,6 +8,16 @@ from .cnn_encoder import (
 from .gaf_encoder import GAFClassifier, GAFEncoder
 from .mtf_encoder import MTFClassifier, MTFEncoder
 from .multi_concat import MultiConcatFusionMLP
+from .multimodal_film_fusion import FiLMFusion, RawFiLMStatsGAFSTFTClassifier
+from .multimodal_gated_fusion import (
+    MultiModalGatedFusion,
+    RawGatedStatsGAFSTFTClassifier,
+    RawStatsGAFMTFSTFTGatedClassifier,
+)
+from .multimodal_residual_gated_fusion import (
+    RawCenteredResidualFusion,
+    RawCenteredStatsGAFSTFTClassifier,
+)
 from .raw_gaf_concat import RawGAFConcatClassifier
 from .raw_mtf_concat import RawMTFConcatClassifier
 from .raw_stats_gaf_concat import RawStatsGAFConcatClassifier
@@ -30,10 +40,17 @@ __all__ = [
     "MTFClassifier",
     "MTFEncoder",
     "MLPBlock",
+    "FiLMFusion",
+    "MultiModalGatedFusion",
     "MultiConcatFusionMLP",
+    "RawCenteredResidualFusion",
+    "RawCenteredStatsGAFSTFTClassifier",
     "RawCNNClassifier",
+    "RawFiLMStatsGAFSTFTClassifier",
     "RawGAFConcatClassifier",
+    "RawGatedStatsGAFSTFTClassifier",
     "RawMTFConcatClassifier",
+    "RawStatsGAFMTFSTFTGatedClassifier",
     "RawStatsGAFConcatClassifier",
     "RawStatsGAFMTFSTFTConcatClassifier",
     "RawStatsGAFSTFTConcatClassifier",
