@@ -6,13 +6,13 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-from image_transformation.methods.stft_transformation import STFTSpectrogram
-from statistical.quantile_extractor import (
+from src.image_transformation.methods.stft_transformation import STFTSpectrogram
+from src.statistical.quantile_extractor import (
     STAT_METHODS_GLOBAL_TORCH,
     STAT_METHODS_TORCH,
     TorchQuantileExtractor,
 )
-from tools.normilization import log1p_nonnegative
+from src.tools.normilization import log1p_nonnegative
 
 IMAGE_LOG1P_TRANSFORMS = frozenset({"STFT", STFTSpectrogram})
 

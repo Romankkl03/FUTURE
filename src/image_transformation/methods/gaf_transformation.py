@@ -76,10 +76,11 @@ class GAF:
         # X_paa = segmentation_torch(X.shape[-1], self.window_size, self.overlapping, self.image_size)
         if self.sample_range is None:
             X_min, X_max = torch.min(X_paa), torch.max(X_paa)
-            if (X_min < -1) or (X_max > 1):
+            eps = 1e-5
+            if (X_min < -1 - eps) or (X_max > 1 + eps):
                 raise ValueError("If 'sample_range' is None, all the values "
                                  "of X must be between -1 and 1.")
-            X_cos = X_paa
+            X_cos = X_paa.clamp(-1.0, 1.0)
         else:
             X_cos = MinMaxScalerTorch(X_paa, self.sample_range)
         X_sin = torch.sqrt(torch.clamp(1 - X_cos**2, min=0, max=1))

@@ -1,85 +1,53 @@
-from .cnn_encoder import (
-    CNN_Encoder,
-    ClassificationHead,
-    ConvBlock1D,
-    RawCNNClassifier,
-    RawTimeSeriesEncoder,
+from src.models.common.training import single_input_batch, train_with_batch_adapter, two_input_batch
+from src.models.encoder.gaf_encoder import GAFEncoder
+from src.models.encoder.mtf_encoder import MTFEncoder
+from src.models.encoder.raw_encoder import ConvBlock1D, RawTimeSeriesEncoder
+from src.models.encoder.stats_encoder import MLPBlock, StatisticalEncoder
+from src.models.encoder.stft_encoder import STFTEncoder
+from src.models.fusion.bottleneck_fusion import BottleneckLatentBlock, BottleneckRepresentationEncoder
+from src.models.fusion.concat_fusion import MultiConcatFusionMLP
+from src.models.fusion.film_fusion import FiLMFusion
+from src.models.fusion.gated_fusion import MultiModalGatedFusion
+from src.models.fusion.raw_centered_residual_fusion import RawCenteredResidualFusion
+from src.models.fusion.raw_conditioned_bottleneck_fusion import RawConditionedBottleneckRepresentationEncoder
+from src.models.head.classification import ClassificationHead
+from src.models.multimodals.bottleneck_fusion_clf import FlexibleBottleneckClassifier
+from src.models.multimodals.concat_fusion_clf import FlexibleConcatClassifier
+from src.models.multimodals.context_only_residual_bottleneck_clf import (
+    FlexibleContextOnlyResidualBottleneckClassifier,
 )
-from .bottleneck_modified import (
-    ContextOnlyResidualBottleneckClassifier,
-    RawConditionedBottleneckRepresentationEncoder,
-    RawConditionedContextBottleneckClassifier,
-    RawResidualBottleneckClassifier,
+from src.models.multimodals.film_fusion_clf import FlexibleFiLMClassifier
+from src.models.multimodals.gated_fusion_clf import FlexibleGatedClassifier
+from src.models.multimodals.raw_conditioned_bottleneck_clf import (
+    FlexibleRawConditionedContextBottleneckClassifier,
 )
-from .gaf_encoder import GAFClassifier, GAFEncoder
-from .mtf_encoder import MTFClassifier, MTFEncoder
-from .multi_concat import MultiConcatFusionMLP
-from .multimodal_bottleneck_fusion import (
-    BottleneckLatentBlock,
-    BottleneckRepresentationEncoder,
-    RawStatsGAFSTFTBottleneckClassifier,
-)
-from .multimodal_film_fusion import FiLMFusion, RawFiLMStatsGAFSTFTClassifier
-from .multimodal_gated_fusion import (
-    MultiModalGatedFusion,
-    RawGatedStatsGAFSTFTClassifier,
-    RawStatsGAFMTFSTFTGatedClassifier,
-)
-from .multimodal_residual_gated_fusion import (
-    RawCenteredResidualFusion,
-    RawCenteredStatsGAFSTFTClassifier,
-)
-from .raw_gaf_concat import RawGAFConcatClassifier
-from .raw_mtf_concat import RawMTFConcatClassifier
-from .raw_stats_gaf_concat import RawStatsGAFConcatClassifier
-from .raw_stats_gaf_mtf_stft_concat import RawStatsGAFMTFSTFTConcatClassifier
-from .raw_stats_gaf_stft_concat import RawStatsGAFSTFTConcatClassifier
-from .raw_stats_stft_concat import RawStatsSTFTConcatClassifier
-from .raw_stats_concat import ConcatFusionMLP, RawStatsConcatClassifier
-from .raw_stft_concat import RawSTFTConcatClassifier
-from .stft_encoder import STFTClassifier, STFTEncoder
-from .stats_encoder import MLPBlock, StatisticalEncoder, StatisticalMLPClassifier
-from .training import single_input_batch, train_with_batch_adapter, two_input_batch
+from src.models.multimodals.raw_residual_bottleneck_clf import FlexibleRawResidualBottleneckClassifier
+from src.models.multimodals.raw_residual_centered_fusion_clf import FlexibleRawCenteredResidualClassifier
 
 __all__ = [
-    "CNN_Encoder",
-    "ClassificationHead",
-    "ConcatFusionMLP",
-    "ConvBlock1D",
     "BottleneckLatentBlock",
     "BottleneckRepresentationEncoder",
-    "ContextOnlyResidualBottleneckClassifier",
-    "GAFClassifier",
+    "ClassificationHead",
+    "ConvBlock1D",
+    "FiLMFusion",
+    "FlexibleBottleneckClassifier",
+    "FlexibleConcatClassifier",
+    "FlexibleContextOnlyResidualBottleneckClassifier",
+    "FlexibleFiLMClassifier",
+    "FlexibleGatedClassifier",
+    "FlexibleRawCenteredResidualClassifier",
+    "FlexibleRawConditionedContextBottleneckClassifier",
+    "FlexibleRawResidualBottleneckClassifier",
     "GAFEncoder",
-    "MTFClassifier",
     "MTFEncoder",
     "MLPBlock",
-    "FiLMFusion",
     "MultiModalGatedFusion",
     "MultiConcatFusionMLP",
     "RawCenteredResidualFusion",
-    "RawCenteredStatsGAFSTFTClassifier",
-    "RawCNNClassifier",
-    "RawFiLMStatsGAFSTFTClassifier",
-    "RawGAFConcatClassifier",
-    "RawGatedStatsGAFSTFTClassifier",
-    "RawMTFConcatClassifier",
     "RawConditionedBottleneckRepresentationEncoder",
-    "RawConditionedContextBottleneckClassifier",
-    "RawResidualBottleneckClassifier",
-    "RawStatsGAFMTFSTFTGatedClassifier",
-    "RawStatsGAFSTFTBottleneckClassifier",
-    "RawStatsGAFConcatClassifier",
-    "RawStatsGAFMTFSTFTConcatClassifier",
-    "RawStatsGAFSTFTConcatClassifier",
-    "RawStatsConcatClassifier",
-    "RawStatsSTFTConcatClassifier",
-    "RawSTFTConcatClassifier",
     "RawTimeSeriesEncoder",
-    "STFTClassifier",
     "STFTEncoder",
     "StatisticalEncoder",
-    "StatisticalMLPClassifier",
     "single_input_batch",
     "train_with_batch_adapter",
     "two_input_batch",

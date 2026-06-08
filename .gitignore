@@ -12,3 +12,4 @@ build/
 *.tsv
 /data/
 *.json
+results/fusion_over_raw/checkpoints/
