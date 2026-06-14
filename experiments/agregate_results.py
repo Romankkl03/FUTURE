@@ -9,8 +9,11 @@ import numpy as np
 import pandas as pd
 
 
-DEFAULT_SUMMARY_PATH = Path("results/fusion_over_raw/summary.csv")
-DEFAULT_OUTPUT_DIR = Path("results/fusion_over_raw/aggregates")
+from experiments.tools import FUSION_OVER_RAW_SUMMARY_CSV, FUSION_OVER_RAW_TABLES_DIR
+
+
+DEFAULT_SUMMARY_PATH = FUSION_OVER_RAW_SUMMARY_CSV
+DEFAULT_OUTPUT_DIR = FUSION_OVER_RAW_TABLES_DIR
 STRICT_THRESHOLD = 0.005
 PRACTICAL_THRESHOLD = 0.01
 

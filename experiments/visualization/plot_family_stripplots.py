@@ -11,9 +11,11 @@ import seaborn as sns
 
 from experiments.agregate_results import BOTTLENECK_METHODS, fusion_method, read_summary
 
-
-DEFAULT_SUMMARY_PATH = Path("results/fusion_over_raw/summary.csv")
-DEFAULT_OUTPUT_DIR = Path("results/fusion_over_raw/plots")
+from experiments.tools import (
+    FUSION_OVER_RAW_PLOTS_DIR,
+    FUSION_OVER_RAW_SUMMARY_CSV,
+    FUSION_OVER_RAW_TABLES_DIR,
+)
 
 FAMILY_ORDER = [
     "single",
@@ -37,8 +39,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Strip/swarm plots of median macro_f1 by model family (one plot per dataset).",
     )
-    parser.add_argument("--summary", default=str(DEFAULT_SUMMARY_PATH))
-    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--summary", default=str(FUSION_OVER_RAW_SUMMARY_CSV))
+    parser.add_argument("--output-dir", default=str(FUSION_OVER_RAW_PLOTS_DIR))
+    parser.add_argument("--tables-dir", default=str(FUSION_OVER_RAW_TABLES_DIR))
     parser.add_argument("--plot-type", choices=("strip", "swarm"), default="strip")
     parser.add_argument("--overlay", choices=("violin", "box", "none"), default="violin")
     parser.add_argument("--dpi", type=int, default=150)
@@ -314,16 +317,18 @@ def run(args: argparse.Namespace) -> tuple[list[Path], Path, Path, Path]:
     points = build_plot_points(df)
     family_vs_best_single = build_family_vs_best_single_table(df)
     top3_by_dataset = build_top3_by_dataset_table(family_vs_best_single)
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    points.to_csv(output_dir / "family_plot_points.csv", index=False)
-    family_vs_best_single_path = output_dir / "family_vs_best_single.csv"
+    plots_dir = Path(args.output_dir)
+    tables_dir = Path(args.tables_dir)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    points.to_csv(tables_dir / "family_plot_points.csv", index=False)
+    family_vs_best_single_path = tables_dir / "family_vs_best_single.csv"
     family_vs_best_single.to_csv(family_vs_best_single_path, index=False)
-    top3_path = output_dir / "family_top3_by_dataset.csv"
+    top3_path = tables_dir / "family_top3_by_dataset.csv"
     top3_by_dataset.to_csv(top3_path, index=False)
     all_datasets_heatmap_path = plot_all_datasets_heatmap(
         family_vs_best_single,
-        output_dir=output_dir,
+        output_dir=plots_dir,
         dpi=args.dpi,
     )
 
@@ -333,7 +338,7 @@ def run(args: argparse.Namespace) -> tuple[list[Path], Path, Path, Path]:
             plot_dataset(
                 points,
                 dataset_name,
-                output_dir=output_dir,
+                output_dir=plots_dir,
                 plot_type=args.plot_type,
                 overlay=args.overlay,
                 dpi=args.dpi,

@@ -9,6 +9,19 @@ from typing import Any
 import numpy as np
 import torch
 
+FUSION_OVER_RAW_DIR = Path("results/fusion_over_raw")
+FUSION_OVER_RAW_TABLES_DIR = FUSION_OVER_RAW_DIR / "tables"
+FUSION_OVER_RAW_PLOTS_DIR = FUSION_OVER_RAW_DIR / "plots"
+FUSION_OVER_RAW_SUMMARY_CSV = FUSION_OVER_RAW_TABLES_DIR / "summary.csv"
+
+
+def fusion_over_raw_tables_dir(output_dir: Path) -> Path:
+    return output_dir / "tables"
+
+
+def fusion_over_raw_plots_dir(output_dir: Path) -> Path:
+    return output_dir / "plots"
+
 
 def make_json_safe(value: Any) -> Any:
     if isinstance(value, np.ndarray):

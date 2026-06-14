@@ -11,9 +11,11 @@ import seaborn as sns
 
 from experiments.agregate_results import fusion_method, read_summary
 
-
-DEFAULT_SUMMARY_PATH = Path("results/fusion_over_raw/summary.csv")
-DEFAULT_OUTPUT_DIR = Path("results/fusion_over_raw/plots")
+from experiments.tools import (
+    FUSION_OVER_RAW_PLOTS_DIR,
+    FUSION_OVER_RAW_SUMMARY_CSV,
+    FUSION_OVER_RAW_TABLES_DIR,
+)
 
 PANEL_FAMILIES = [
     "raw_centered_residual",
@@ -35,8 +37,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="2-panel heatmaps: feature-combination sensitivity across datasets.",
     )
-    parser.add_argument("--summary", default=str(DEFAULT_SUMMARY_PATH))
-    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--summary", default=str(FUSION_OVER_RAW_SUMMARY_CSV))
+    parser.add_argument("--output-dir", default=str(FUSION_OVER_RAW_PLOTS_DIR))
+    parser.add_argument("--tables-dir", default=str(FUSION_OVER_RAW_TABLES_DIR))
     parser.add_argument("--dpi", type=int, default=150)
     return parser.parse_args()
 
@@ -164,7 +167,8 @@ def build_long_table(matrices: dict[str, pd.DataFrame]) -> pd.DataFrame:
 def plot_feature_combination_heatmaps(
     df: pd.DataFrame,
     *,
-    output_dir: Path,
+    plots_dir: Path,
+    tables_dir: Path,
     dpi: int,
 ) -> tuple[Path, Path]:
     datasets = sorted(df["dataset"].unique())
@@ -202,20 +206,26 @@ def plot_feature_combination_heatmaps(
     cbar = fig.colorbar(sm, ax=axes, fraction=0.02, pad=0.02)
     cbar.set_label("Median macro_f1 over seeds")
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    figure_path = output_dir / "feature_combination_sensitivity.png"
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    figure_path = plots_dir / "feature_combination_sensitivity.png"
     fig.savefig(figure_path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
     table = build_long_table(matrices)
-    table_path = output_dir / "feature_combination_sensitivity.csv"
+    table_path = tables_dir / "feature_combination_sensitivity.csv"
     table.to_csv(table_path, index=False)
     return figure_path, table_path
 
 
 def run(args: argparse.Namespace) -> tuple[Path, Path]:
     df = read_summary(Path(args.summary))
-    return plot_feature_combination_heatmaps(df, output_dir=Path(args.output_dir), dpi=args.dpi)
+    return plot_feature_combination_heatmaps(
+        df,
+        plots_dir=Path(args.output_dir),
+        tables_dir=Path(args.tables_dir),
+        dpi=args.dpi,
+    )
 
 
 if __name__ == "__main__":

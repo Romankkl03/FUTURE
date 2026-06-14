@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import csv
 import json
 import time
 from dataclasses import dataclass
@@ -15,7 +16,12 @@ from sklearn.linear_model import LogisticRegression, RidgeClassifierCV
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 
-from experiments.tools import make_json_safe, save_json_result, save_summary_csv
+from experiments.tools import (
+    FUSION_OVER_RAW_DIR,
+    fusion_over_raw_tables_dir,
+    save_json_result,
+    save_summary_csv,
+)
 from src.data import (
     as_univariate_feature_tensor,
     feats_batched,
@@ -46,7 +52,7 @@ from src.tools import get_device, per_sample_minmax_scale, per_sample_z_normaliz
 
 
 DEFAULT_CONFIG_PATH = Path(__file__).with_name("configs") / "fusion_over_raw.json"
-DEFAULT_OUTPUT_DIR = Path("results/fusion_over_raw")
+DEFAULT_OUTPUT_DIR = FUSION_OVER_RAW_DIR
 TRACKED_METRICS = ("accuracy", "balanced_accuracy", "macro_f1", "weighted_f1")
 ALL_MODALITIES = ("raw", "stats", "gaf", "stft")
 
@@ -761,7 +767,9 @@ def result_path(
     modalities: tuple[str, ...],
     seed: int,
 ) -> Path:
-    return output_dir / "runs" / result_file_name(dataset_name, architecture, modalities, seed)
+    return fusion_over_raw_tables_dir(output_dir) / result_file_name(
+        dataset_name, architecture, modalities, seed
+    )
 
 
 def run_deep_model(
@@ -908,14 +916,23 @@ def persist_result(
     result: dict[str, Any],
     row: dict[str, Any],
 ) -> None:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    save_json_result(result, result_path(output_dir, row["dataset"], row["architecture"], tuple(row["modalities"].split("+")), row["seed"]))
+    tables_dir = fusion_over_raw_tables_dir(output_dir)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    save_json_result(
+        result,
+        result_path(
+            output_dir,
+            row["dataset"],
+            row["architecture"],
+            tuple(row["modalities"].split("+")),
+            row["seed"],
+        ),
+    )
     key = row_key(row)
     if key not in seen_rows:
         rows.append(row)
         seen_rows.add(key)
-    save_summary_csv(rows, output_dir / "summary.csv")
-    save_json_result({"rows": make_json_safe(rows)}, output_dir / "summary.json")
+    save_summary_csv(rows, tables_dir / "summary.csv")
 
 
 def row_key(row: dict[str, Any]) -> tuple[str, str, str, int]:
@@ -928,19 +945,40 @@ def row_key(row: dict[str, Any]) -> tuple[str, str, str, int]:
 
 
 def load_existing_rows(output_dir: Path) -> list[dict[str, Any]]:
-    summary_path = output_dir / "summary.json"
-    if summary_path.is_file():
-        with summary_path.open("r", encoding="utf-8") as file:
-            payload = json.load(file)
-        return list(payload.get("rows", []))
+    tables_dir = fusion_over_raw_tables_dir(output_dir)
+    summary_csv = tables_dir / "summary.csv"
+    if summary_csv.is_file():
+        with summary_csv.open("r", encoding="utf-8", newline="") as file:
+            return list(csv.DictReader(file))
 
     rows: list[dict[str, Any]] = []
-    for path in sorted((output_dir / "runs").glob("*.json")):
+    for path in sorted(tables_dir.glob("*.json")):
+        if "__seed_" not in path.name:
+            continue
         with path.open("r", encoding="utf-8") as file:
             result = json.load(file)
         if {"dataset", "architecture", "modalities", "seed"}.issubset(result):
-            row = {key: result[key] for key in result if key not in {"training_history", "test_metrics", "val_metrics", "config", "prepared_metadata"}}
+            row = {
+                key: result[key]
+                for key in result
+                if key
+                not in {"training_history", "test_metrics", "val_metrics", "config", "prepared_metadata"}
+            }
             rows.append(row)
+
+    legacy_runs = output_dir / "runs"
+    if not rows and legacy_runs.is_dir():
+        for path in sorted(legacy_runs.glob("*.json")):
+            with path.open("r", encoding="utf-8") as file:
+                result = json.load(file)
+            if {"dataset", "architecture", "modalities", "seed"}.issubset(result):
+                row = {
+                    key: result[key]
+                    for key in result
+                    if key
+                    not in {"training_history", "test_metrics", "val_metrics", "config", "prepared_metadata"}
+                }
+                rows.append(row)
     return rows
 
 

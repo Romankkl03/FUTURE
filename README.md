@@ -65,13 +65,13 @@ python -m experiments.fusion_over_raw_experiment \
   --skip-existing
 ```
 
-**Aggregate results** and **regenerate plots** from `tables/summary.csv`:
+**Aggregate results** and **regenerate plots**:
 
 ```bash
-python -m experiments.agregate_results --summary results/fusion_over_raw/tables/summary.csv
-python -m experiments.visualization.plot_family_stripplots --summary results/fusion_over_raw/tables/summary.csv
-python -m experiments.visualization.plot_feature_combination_heatmaps --summary results/fusion_over_raw/tables/summary.csv
-python -m experiments.visualization.plot_bottleneck_comparison --summary results/fusion_over_raw/tables/summary.csv
+python -m experiments.agregate_results
+python -m experiments.visualization.plot_family_stripplots
+python -m experiments.visualization.plot_feature_combination_heatmaps
+python -m experiments.visualization.plot_bottleneck_comparison
 ```
 
 **Transformation benchmark** (GAF / MTF / STFT speed and correctness vs pyts/scipy):
@@ -133,8 +133,7 @@ pytest
 
 All experiment artifacts are under [`results/fusion_over_raw/`](results/fusion_over_raw/):
 
-- [`tables/`](results/fusion_over_raw/tables/) — `summary.csv` (one row per dataset × architecture × seed) and derived CSV tables from aggregation/plot scripts
-- [`runs/`](results/fusion_over_raw/runs/) — per-run JSON results
+- [`tables/`](results/fusion_over_raw/tables/) — `summary.csv`, per-run JSON results, and derived CSV/JSON tables from aggregation and plot scripts
 - [`plots/`](results/fusion_over_raw/plots/) — figures (key heatmaps below)
 
 Transformation benchmark outputs: `results/image_transformations_benchmarks/{boxplot.png, summary.csv, timings.csv}`

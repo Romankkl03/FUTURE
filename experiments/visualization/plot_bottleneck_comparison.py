@@ -11,9 +11,11 @@ import seaborn as sns
 
 from experiments.agregate_results import read_summary
 
-
-DEFAULT_SUMMARY_PATH = Path("results/fusion_over_raw/summary.csv")
-DEFAULT_OUTPUT_DIR = Path("results/fusion_over_raw/plots")
+from experiments.tools import (
+    FUSION_OVER_RAW_PLOTS_DIR,
+    FUSION_OVER_RAW_SUMMARY_CSV,
+    FUSION_OVER_RAW_TABLES_DIR,
+)
 
 MODALITIES = "raw+stats+gaf+stft"
 
@@ -36,8 +38,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Compare bottleneck variants on raw+stats+gaf+stft across datasets.",
     )
-    parser.add_argument("--summary", default=str(DEFAULT_SUMMARY_PATH))
-    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--summary", default=str(FUSION_OVER_RAW_SUMMARY_CSV))
+    parser.add_argument("--output-dir", default=str(FUSION_OVER_RAW_PLOTS_DIR))
+    parser.add_argument("--tables-dir", default=str(FUSION_OVER_RAW_TABLES_DIR))
     parser.add_argument("--dpi", type=int, default=150)
     return parser.parse_args()
 
@@ -179,7 +182,8 @@ def draw_heatmap(
 def plot_bottleneck_comparison(
     table: pd.DataFrame,
     *,
-    output_dir: Path,
+    plots_dir: Path,
+    tables_dir: Path,
     dpi: int,
 ) -> tuple[Path, Path, Path, Path]:
     datasets = sorted(table["dataset"].unique())
@@ -239,15 +243,16 @@ def plot_bottleneck_comparison(
         fontsize=16,
     )
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    figure_path = output_dir / "bottleneck_variants_heatmaps.png"
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    figure_path = plots_dir / "bottleneck_variants_heatmaps.png"
     fig.savefig(figure_path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
-    table_path = output_dir / "bottleneck_variants.csv"
+    table_path = tables_dir / "bottleneck_variants.csv"
     table.to_csv(table_path, index=False)
 
-    median_only_path = output_dir / "bottleneck_variants_median_heatmap.png"
+    median_only_path = plots_dir / "bottleneck_variants_median_heatmap.png"
     fig_m, ax_m = plt.subplots(
         figsize=(8.5, max(4.8, 0.55 * len(datasets) + 2.2)),
         constrained_layout=True,
@@ -274,7 +279,7 @@ def plot_bottleneck_comparison(
     fig_m.savefig(median_only_path, dpi=dpi, bbox_inches="tight")
     plt.close(fig_m)
 
-    delta_only_path = output_dir / "bottleneck_variants_delta_heatmap.png"
+    delta_only_path = plots_dir / "bottleneck_variants_delta_heatmap.png"
     fig_d, ax_d = plt.subplots(
         figsize=(8.5, max(4.8, 0.55 * len(datasets) + 2.2)),
         constrained_layout=True,
@@ -308,7 +313,10 @@ def run(args: argparse.Namespace) -> tuple[Path, Path, Path, Path]:
     df = read_summary(Path(args.summary))
     table = build_comparison_table(df)
     table_path, combined_path, median_path, delta_path = plot_bottleneck_comparison(
-        table, output_dir=Path(args.output_dir), dpi=args.dpi
+        table,
+        plots_dir=Path(args.output_dir),
+        tables_dir=Path(args.tables_dir),
+        dpi=args.dpi,
     )
     return table_path, median_path, delta_path, combined_path
 
