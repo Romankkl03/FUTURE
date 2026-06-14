@@ -1,16 +1,30 @@
+"""Classification head for fused or single-modality embeddings."""
+
 import torch
 import torch.nn as nn
 
 
 class ClassificationHead(nn.Module):
-    """
-    Task head для классификации.
+    """Two-layer MLP head that maps embeddings to class logits.
 
-    Input:
-        h: [batch, d_model]
+    Architecture: ``Linear → LayerNorm → GELU → Dropout → Linear``.
 
-    Output:
-        logits: [batch, num_classes]
+    Parameters
+    ----------
+    d_model:
+        Input embedding size.
+    num_classes:
+        Number of output classes.
+    hidden_dim:
+        Width of the hidden layer (default 128).
+    dropout:
+        Dropout rate applied after the activation.
+
+    Forward
+    -------
+    h : Tensor, shape ``(batch, d_model)``
+        Fused or single-modality representation.
+    Returns logits of shape ``(batch, num_classes)``.
     """
 
     def __init__(

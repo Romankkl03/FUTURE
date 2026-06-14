@@ -1,26 +1,29 @@
+"""Configurable multimodal classifier with latent bottleneck fusion."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
-from src.models.head.classification import ClassificationHead
 from src.models.fusion.bottleneck_fusion import BottleneckRepresentationEncoder
+from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
 
 
 class FlexibleBottleneckClassifier(nn.Module):
-    """
-    Flexible multimodal bottleneck classifier.
+    """Multimodal classifier with attention-based bottleneck fusion.
 
-    Each selected modality is encoded into h_i ∈ R^D.
-    Then BottleneckRepresentationEncoder builds a fused representation
-    through latent bottleneck tokens.
+    All selected modalities are encoded, stacked as keys/values, and fused
+    through learnable latent tokens (cross-attn + self-attn). See
+    :class:`~src.models.fusion.bottleneck_fusion.BottleneckRepresentationEncoder`.
 
-    Example:
+    Example::
+
         model = FlexibleBottleneckClassifier(
             modalities=("raw", "stats", "gaf", "stft"),
-            num_classes=10,
+            num_classes=4,
             d_model=128,
+            num_latents=4,
             encoder_kwargs={
                 "raw": {"in_channels": 1},
                 "stats": {"in_features": 32},
@@ -28,13 +31,7 @@ class FlexibleBottleneckClassifier(nn.Module):
                 "stft": {"in_channels": 1},
             },
         )
-
-        logits = model({
-            "raw": x_raw,
-            "stats": x_stats,
-            "gaf": x_gaf,
-            "stft": x_stft,
-        })
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf, "stft": x_stft})
     """
 
     def __init__(
@@ -105,6 +102,7 @@ class FlexibleBottleneckClassifier(nn.Module):
         self,
         inputs: Mapping[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
+        """Encode each modality input to ``(batch, d_model)``."""
         embeddings: dict[str, torch.Tensor] = {}
 
         for name in self.modalities:

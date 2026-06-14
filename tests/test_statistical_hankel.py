@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from statistical.hankel import HankelMatrix
+from src.statistical.hankel import HankelMatrix
 
 
 @pytest.fixture

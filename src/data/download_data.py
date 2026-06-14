@@ -23,12 +23,8 @@ FORD_A_RAW_URLS = {
 }
 
 __all__ = [
-    "TSLoader",
     "TimeSeriesDatasetSplit",
     "load_dataset",
-    "prepare_dataset",
-    "load_basic_motions_dataset",
-    "load_ford_a_dataset",
 ]
 
 
@@ -255,17 +251,3 @@ def load_dataset(
     loader = TSLoader(data_dir)
     X_train, y_train, X_test, y_test = loader.download_by_url(dataset_name, use_cache=use_cache)
     return prepare_dataset(X_train, y_train, X_test, y_test)
-
-
-def load_basic_motions_dataset() -> TimeSeriesDatasetSplit:
-    """BasicMotions: 6 каналов, 100 отсчётов, 4 класса."""
-    return load_dataset("BasicMotions")
-
-
-def load_ford_a_dataset(
-    *,
-    data_home: Optional[PathLike] = None,
-    use_cache: bool = True,
-) -> TimeSeriesDatasetSplit:
-    """FordA: одномерный ряд; сохраняется в ``data/FordA``."""
-    return load_dataset("FordA", data_dir=data_home or DEFAULT_DATA_DIR, use_cache=use_cache)

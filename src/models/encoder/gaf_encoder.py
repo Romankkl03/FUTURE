@@ -1,8 +1,12 @@
+"""2D-CNN encoder for Gramian Angular Field (GAF) images."""
+
 import torch
 import torch.nn as nn
 
 
 class GAFConvBlock(nn.Module):
+    """2D convolution block: Conv2d → BatchNorm → GELU → MaxPool2d → Dropout2d."""
+
     def __init__(
         self,
         in_channels: int,
@@ -23,14 +27,16 @@ class GAFConvBlock(nn.Module):
 
 
 class GAFEncoder(nn.Module):
-    """
-    CNN encoder for GAF images.
+    """Encode GAF images into a fixed-size embedding.
 
-    Input:
-        x_gaf: [batch, channels, height, width]
+    Architecture: stacked :class:`GAFConvBlock` layers → global average pool
+    → linear projection to ``d_model``.
 
-    Output:
-        h_gaf: [batch, d_model]
+    Forward
+    -------
+    x_gaf : Tensor, shape ``(batch, channels, height, width)``
+        GAF image tensor (typically ``channels=1``).
+    Returns ``h_gaf`` of shape ``(batch, d_model)``.
     """
 
     def __init__(

@@ -1,40 +1,34 @@
+"""Configurable raw-centered FiLM multimodal classifier."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
-from src.models.head.classification import ClassificationHead
 from src.models.fusion.film_fusion import FiLMFusion
+from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
 
 
 class FlexibleFiLMClassifier(nn.Module):
-    """
-    Flexible raw-centered FiLM classifier.
+    """Raw-centered classifier with FiLM conditioning from context modalities.
 
-    Raw is the main representation.
-    Context modalities generate FiLM parameters gamma and beta.
+    Raw is the main stream; context modalities (stats, GAF, STFT, …) produce
+    scale/shift parameters: ``h_final = h_raw * (1 + gamma) + beta``.
 
-    Example:
+    Example::
+
         model = FlexibleFiLMClassifier(
-            raw_modality="raw",
-            context_modalities=("stats", "gaf", "stft"),
-            num_classes=10,
+            context_modalities=("stats", "gaf"),
+            num_classes=4,
             d_model=128,
             encoder_kwargs={
                 "raw": {"in_channels": 1},
                 "stats": {"in_features": 32},
                 "gaf": {"in_channels": 1},
-                "stft": {"in_channels": 1},
             },
         )
-
-        logits = model({
-            "raw": x_raw,
-            "stats": x_stats,
-            "gaf": x_gaf,
-            "stft": x_stft,
-        })
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
     """
 
     def __init__(
@@ -66,7 +60,6 @@ class FlexibleFiLMClassifier(nn.Module):
 
         all_modalities = (self.raw_modality,) + self.context_modalities
 
-        # Check duplicates
         if len(set(all_modalities)) != len(all_modalities):
             raise ValueError(
                 f"Duplicate modalities are not allowed. Got: {all_modalities}"

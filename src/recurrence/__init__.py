@@ -1,10 +1,10 @@
-from recurrence.kernel_matrix import TorchTSTransformer
-from recurrence.pdist import torch_pdist
-from recurrence.recurrence_extractor import (
+from src.recurrence.kernel_matrix import TorchTSTransformer
+from src.recurrence.pdist import torch_pdist
+from src.recurrence.recurrence_extractor import (
     RECURRENCE_FEATURE_NAMES,
     RecurrenceExtractor,
 )
-from recurrence.sequences import RecurrenceFeatureExtractorTorch
+from src.recurrence.sequences import RecurrenceFeatureExtractorTorch
 
 __all__ = [
     "RECURRENCE_FEATURE_NAMES",

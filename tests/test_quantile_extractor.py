@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from statistical.quantile_extractor import (
+from src.statistical.quantile_extractor import (
     STAT_METHODS_GLOBAL_TORCH,
     STAT_METHODS_TORCH,
     TorchQuantileExtractor,

@@ -1,36 +1,34 @@
+"""Configurable multimodal classifiers built from encoders + fusion modules."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
-from src.models.head.classification import ClassificationHead
 from src.models.fusion.concat_fusion import MultiConcatFusionMLP
+from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
 
 
 class FlexibleConcatClassifier(nn.Module):
-    """
-    Flexible multimodal concat classifier.
+    """Multimodal classifier with concat fusion.
 
-    Example:
+    Each modality is encoded to ``d_model``, concatenated, and passed through
+    an MLP. All modalities are treated symmetrically.
+
+    Example::
+
         model = FlexibleConcatClassifier(
-            modalities=("raw", "stats", "gaf", "stft"),
-            num_classes=10,
+            modalities=("raw", "stats", "gaf"),
+            num_classes=4,
             d_model=128,
             encoder_kwargs={
                 "raw": {"in_channels": 1},
                 "stats": {"in_features": 32},
                 "gaf": {"in_channels": 1},
-                "stft": {"in_channels": 1},
             },
         )
-
-        logits = model({
-            "raw": x_raw,
-            "stats": x_stats,
-            "gaf": x_gaf,
-            "stft": x_stft,
-        })
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
     """
 
     def __init__(

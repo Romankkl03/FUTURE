@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import copy
 import json
-import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -16,22 +15,8 @@ from sklearn.linear_model import LogisticRegression, RidgeClassifierCV
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 
-
-def add_project_paths() -> None:
-    for root in [Path.cwd(), *Path.cwd().parents]:
-        src_dir = root / "src"
-        if (root / "pyproject.toml").is_file() and src_dir.is_dir():
-            for path in (str(root), str(src_dir)):
-                if path not in sys.path:
-                    sys.path.insert(0, path)
-            return
-    raise RuntimeError("Could not find project root with pyproject.toml and src/")
-
-
-add_project_paths()
-
-from experiments.tools import make_json_safe, save_json_result, save_summary_csv  # noqa: E402
-from src.data import (  # noqa: E402
+from experiments.tools import make_json_safe, save_json_result, save_summary_csv
+from src.data import (
     as_univariate_feature_tensor,
     feats_batched,
     get_stat_feature_names,
@@ -39,29 +24,25 @@ from src.data import (  # noqa: E402
     to_cnn_images,
     transform_images_batched,
 )
-from src.image_transformation.methods.gaf_transformation import GAF  # noqa: E402
-from src.image_transformation.methods.stft_transformation import STFTSpectrogram  # noqa: E402
-from src.metrics.metrics import compute_classification_metrics  # noqa: E402
-from src.models.head.classification import ClassificationHead  # noqa: E402
-from src.models.multimodals.bottleneck_fusion_clf import FlexibleBottleneckClassifier  # noqa: E402
-from src.models.multimodals.concat_fusion_clf import FlexibleConcatClassifier  # noqa: E402
-from src.models.multimodals.context_only_residual_bottleneck_clf import (  # noqa: E402
+from src.image_transformation.methods.gaf_transformation import GAF
+from src.image_transformation.methods.stft_transformation import STFTSpectrogram
+from src.metrics.metrics import compute_classification_metrics
+from src.models.head.classification import ClassificationHead
+from src.models.multimodals.bottleneck_fusion_clf import FlexibleBottleneckClassifier
+from src.models.multimodals.concat_fusion_clf import FlexibleConcatClassifier
+from src.models.multimodals.context_only_residual_bottleneck_clf import (
     FlexibleContextOnlyResidualBottleneckClassifier,
 )
-from src.models.multimodals.film_fusion_clf import FlexibleFiLMClassifier  # noqa: E402
-from src.models.multimodals.gated_fusion_clf import FlexibleGatedClassifier  # noqa: E402
-from src.models.multimodals.raw_conditioned_bottleneck_clf import (  # noqa: E402
+from src.models.multimodals.film_fusion_clf import FlexibleFiLMClassifier
+from src.models.multimodals.gated_fusion_clf import FlexibleGatedClassifier
+from src.models.multimodals.raw_conditioned_bottleneck_clf import (
     FlexibleRawConditionedContextBottleneckClassifier,
 )
-from src.models.multimodals.raw_residual_bottleneck_clf import (  # noqa: E402
-    FlexibleRawResidualBottleneckClassifier,
-)
-from src.models.multimodals.raw_residual_centered_fusion_clf import (  # noqa: E402
-    FlexibleRawCenteredResidualClassifier,
-)
-from src.models.registry.encoder_registry import ENCODER_REGISTRY  # noqa: E402
-from src.statistical.quantile_extractor import TorchQuantileExtractor  # noqa: E402
-from src.tools import get_device, per_sample_minmax_scale, per_sample_z_normalize, set_seed  # noqa: E402
+from src.models.multimodals.raw_residual_bottleneck_clf import FlexibleRawResidualBottleneckClassifier
+from src.models.multimodals.raw_residual_centered_fusion_clf import FlexibleRawCenteredResidualClassifier
+from src.models.registry.encoder_registry import ENCODER_REGISTRY
+from src.statistical.quantile_extractor import TorchQuantileExtractor
+from src.tools import get_device, per_sample_minmax_scale, per_sample_z_normalize, set_seed
 
 
 DEFAULT_CONFIG_PATH = Path(__file__).with_name("configs") / "fusion_over_raw.json"

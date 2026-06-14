@@ -1,35 +1,40 @@
+"""Context-only bottleneck with raw residual highway."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
+from src.models.fusion.bottleneck_fusion import BottleneckRepresentationEncoder
 from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
-from src.models.fusion.bottleneck_fusion import BottleneckRepresentationEncoder
 
 
 class FlexibleContextOnlyResidualBottleneckClassifier(nn.Module):
-    """
-    Flexible context-only residual bottleneck classifier.
+    """Raw-centered classifier: bottleneck fuses context only, raw is a highway.
 
-    Bottleneck sees CONTEXT only.
-    RAW stays as separate residual highway.
+    Architecture::
 
-    Architecture:
         h_raw = encoder_raw(x_raw)
-        h_context_i = encoder_i(x_i)
+        h_ctx = Bottleneck(h_ctx_1, h_ctx_2, ...)   # raw NOT in bottleneck
+        h_final = h_raw + alpha * delta(h_ctx)
 
-        h_context = Bottleneck(
-            h_context_1,
-            h_context_2,
-            ...
+    Raw never enters the attention bottleneck; only context modalities do.
+    The bottleneck output is gated and added to ``h_raw``.
+
+    Example::
+
+        model = FlexibleContextOnlyResidualBottleneckClassifier(
+            context_modalities=("stats", "gaf"),
+            num_classes=4,
+            d_model=128,
+            encoder_kwargs={
+                "raw": {"in_channels": 1},
+                "stats": {"in_features": 32},
+                "gaf": {"in_channels": 1},
+            },
         )
-
-        delta = delta_proj(h_context)
-        alpha = sigmoid(alpha_mlp(concat(h_raw, h_context)))
-
-        h_final = h_raw + alpha * delta
-        logits = head(h_final)
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
     """
 
     def __init__(
@@ -124,6 +129,7 @@ class FlexibleContextOnlyResidualBottleneckClassifier(nn.Module):
         self,
         inputs: Mapping[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
+        """Encode each modality input to ``(batch, d_model)``."""
         required_modalities = (self.raw_modality, *self.context_modalities)
 
         embeddings = {}

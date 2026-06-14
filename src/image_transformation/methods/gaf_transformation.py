@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Type
 
 import torch
 
-from ..usefull_transformations import MinMaxScalerTorch, PAA, segmentation_torch
+from .usefull_transformations import MinMaxScalerTorch, PAA, segmentation_torch
 
 TRANSFORMER_REGISTRY: Dict[str, Type] = {}
 

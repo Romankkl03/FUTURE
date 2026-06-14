@@ -1,18 +1,20 @@
+"""Factory registry mapping modality names to encoder builders."""
+
 from typing import Callable
 
 import torch.nn as nn
 
-from src.models.encoder.raw_encoder import RawTimeSeriesEncoder
-from src.models.encoder.stats_encoder import StatisticalEncoder
 from src.models.encoder.gaf_encoder import GAFEncoder
 from src.models.encoder.mtf_encoder import MTFEncoder
+from src.models.encoder.raw_encoder import RawTimeSeriesEncoder
+from src.models.encoder.stats_encoder import StatisticalEncoder
 from src.models.encoder.stft_encoder import STFTEncoder
-
 
 EncoderBuilder = Callable[[int, dict], nn.Module]
 
 
 def build_raw_encoder(d_model: int, cfg: dict) -> nn.Module:
+    """Build a 1D-CNN encoder for raw time series."""
     return RawTimeSeriesEncoder(
         in_channels=cfg["in_channels"],
         d_model=d_model,
@@ -23,6 +25,7 @@ def build_raw_encoder(d_model: int, cfg: dict) -> nn.Module:
 
 
 def build_stats_encoder(d_model: int, cfg: dict) -> nn.Module:
+    """Build an MLP encoder for tabular statistical features."""
     return StatisticalEncoder(
         in_features=cfg["in_features"],
         d_model=d_model,
@@ -32,6 +35,7 @@ def build_stats_encoder(d_model: int, cfg: dict) -> nn.Module:
 
 
 def build_gaf_encoder(d_model: int, cfg: dict) -> nn.Module:
+    """Build a 2D-CNN encoder for GAF images."""
     return GAFEncoder(
         in_channels=cfg["in_channels"],
         d_model=d_model,
@@ -41,6 +45,7 @@ def build_gaf_encoder(d_model: int, cfg: dict) -> nn.Module:
 
 
 def build_mtf_encoder(d_model: int, cfg: dict) -> nn.Module:
+    """Build a 2D-CNN encoder for MTF images."""
     return MTFEncoder(
         in_channels=cfg["in_channels"],
         d_model=d_model,
@@ -50,6 +55,7 @@ def build_mtf_encoder(d_model: int, cfg: dict) -> nn.Module:
 
 
 def build_stft_encoder(d_model: int, cfg: dict) -> nn.Module:
+    """Build a 2D-CNN encoder for STFT spectrograms."""
     return STFTEncoder(
         in_channels=cfg["in_channels"],
         d_model=d_model,

@@ -1,38 +1,43 @@
+"""Raw-conditioned context bottleneck with raw residual highway."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
-from src.models.head.classification import ClassificationHead
-from src.models.registry.encoder_registry import ENCODER_REGISTRY
 from src.models.fusion.raw_conditioned_bottleneck_fusion import (
     RawConditionedBottleneckRepresentationEncoder,
 )
+from src.models.head.classification import ClassificationHead
+from src.models.registry.encoder_registry import ENCODER_REGISTRY
 
 
 class FlexibleRawConditionedContextBottleneckClassifier(nn.Module):
-    """
-    Flexible raw-conditioned context bottleneck classifier.
+    """Raw-centered classifier: raw conditions bottleneck latents over context.
 
-    Bottleneck sees CONTEXT only.
-    RAW controls latent queries.
+    Architecture::
 
-    Architecture:
         h_raw = encoder_raw(x_raw)
-        h_context_i = encoder_i(x_i)
+        h_ctx = RawConditionedBottleneck(h_raw, h_ctx_1, ...)
+        h_final = h_raw + alpha * delta(h_ctx)
 
-        h_context = RawConditionedBottleneck(
-            h_raw,
-            h_context_1,
-            h_context_2,
-            ...
+    Raw does not appear as a bottleneck key/value; instead it initializes
+    latent queries. Context modalities supply keys/values. The fused context
+    is gated and added to ``h_raw``.
+
+    Example::
+
+        model = FlexibleRawConditionedContextBottleneckClassifier(
+            context_modalities=("stats", "gaf"),
+            num_classes=4,
+            d_model=128,
+            encoder_kwargs={
+                "raw": {"in_channels": 1},
+                "stats": {"in_features": 32},
+                "gaf": {"in_channels": 1},
+            },
         )
-
-        delta = delta_proj(h_context)
-        alpha = sigmoid(alpha_mlp(concat(h_raw, h_context)))
-
-        h_final = h_raw + alpha * delta
-        logits = head(h_final)
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
     """
 
     def __init__(
@@ -131,6 +136,7 @@ class FlexibleRawConditionedContextBottleneckClassifier(nn.Module):
         self,
         inputs: Mapping[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
+        """Encode each modality input to ``(batch, d_model)``."""
         required_modalities = (self.raw_modality, *self.context_modalities)
 
         embeddings = {}

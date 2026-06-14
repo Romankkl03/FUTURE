@@ -1,3 +1,5 @@
+"""Minimal training helpers for single- and dual-input models."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -20,6 +22,17 @@ def train_with_batch_adapter(
     lr: float,
     batch_adapter: BatchAdapter,
 ) -> list[float]:
+    """Train a model with Adam and cross-entropy loss.
+
+    ``batch_adapter`` unpacks each dataloader batch, moves tensors to
+    ``device``, and returns ``(model_inputs, labels)`` where
+    ``model_inputs`` is a tuple passed as ``model(*inputs)``.
+
+    Returns
+    -------
+    list[float]
+        Mean training loss per epoch.
+    """
     model.train()
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -48,6 +61,7 @@ def single_input_batch(
     batch: tuple[torch.Tensor, torch.Tensor],
     device: torch.device,
 ) -> tuple[tuple[torch.Tensor], torch.Tensor]:
+    """Adapt ``(x, y)`` batches for single-input models."""
     x, y = batch
     return (x.to(device),), y.to(device)
 
@@ -56,5 +70,6 @@ def two_input_batch(
     batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor],
     device: torch.device,
 ) -> tuple[tuple[torch.Tensor, torch.Tensor], torch.Tensor]:
+    """Adapt ``(x_left, x_right, y)`` batches for two-input models."""
     x_left, x_right, y = batch
     return (x_left.to(device), x_right.to(device)), y.to(device)

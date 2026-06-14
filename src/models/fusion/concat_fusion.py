@@ -1,10 +1,20 @@
+"""Concatenation-based fusion of modality embeddings."""
+
 import torch
 import torch.nn as nn
 
 
 class MultiConcatFusionMLP(nn.Module):
-    """
-    concat(h_1, ..., h_n) -> h_final
+    """Fuse modality embeddings by concatenation followed by an MLP.
+
+    Computes ``MLP(concat(h_1, ..., h_n))`` where each ``h_i`` has shape
+    ``(batch, d_model)``.
+
+    Forward
+    -------
+    *embeddings : Tensor
+        ``n_inputs`` tensors, each of shape ``(batch, d_model)``.
+    Returns fused embedding of shape ``(batch, d_model)``.
     """
 
     def __init__(

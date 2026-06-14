@@ -1,8 +1,12 @@
+"""2D-CNN encoder for Markov Transition Field (MTF) images."""
+
 import torch
 import torch.nn as nn
 
 
 class MTFConvBlock(nn.Module):
+    """2D convolution block: Conv2d → BatchNorm → GELU → MaxPool2d → Dropout2d."""
+
     def __init__(
         self,
         in_channels: int,
@@ -23,14 +27,16 @@ class MTFConvBlock(nn.Module):
 
 
 class MTFEncoder(nn.Module):
-    """
-    CNN encoder for MTF images.
+    """Encode MTF images into a fixed-size embedding.
 
-    Input:
-        x_mtf: [batch, channels, height, width]
+    Architecture: stacked :class:`MTFConvBlock` layers → global average pool
+    → linear projection to ``d_model``.
 
-    Output:
-        h_mtf: [batch, d_model]
+    Forward
+    -------
+    x_mtf : Tensor, shape ``(batch, channels, height, width)``
+        MTF image tensor (typically ``channels=1``).
+    Returns ``h_mtf`` of shape ``(batch, d_model)``.
     """
 
     def __init__(

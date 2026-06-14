@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,20 +8,6 @@ import matplotlib.patches as patches
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
-
-def add_project_paths() -> None:
-    for root in [Path.cwd(), *Path.cwd().parents]:
-        src_dir = root / "src"
-        if (root / "pyproject.toml").is_file() and src_dir.is_dir():
-            for path in (str(root), str(src_dir)):
-                if path not in sys.path:
-                    sys.path.insert(0, path)
-            return
-    raise RuntimeError("Could not find project root with pyproject.toml and src/")
-
-
-add_project_paths()
 
 from experiments.agregate_results import BOTTLENECK_METHODS, fusion_method, read_summary
 

@@ -12,4 +12,5 @@ build/
 *.tsv
 /data/
 *.json
+!experiments/configs/fusion_over_raw.json
 results/fusion_over_raw/checkpoints/

@@ -1,19 +1,24 @@
+"""Latent bottleneck fusion via cross- and self-attention."""
+
 import torch
 import torch.nn as nn
 
 
 class BottleneckLatentBlock(nn.Module):
-    """
-    One bottleneck block:
+    """One bottleneck transformer block over latent and modality tokens.
 
-    1. Cross-attention:
-        Q = latent tokens
-        K,V = modality tokens
+    Pipeline (each step is residual):
 
-    2. Self-attention:
-        Q,K,V = latent tokens
+    1. Cross-attention — latent tokens attend to modality tokens.
+    2. Self-attention — latent tokens attend to each other.
+    3. Feed-forward MLP on latent tokens.
 
-    3. Feed-forward network over latent tokens
+    Forward
+    -------
+    latents : Tensor, shape ``(batch, num_latents, d_model)``
+        Learnable bottleneck queries.
+    modality_tokens : Tensor, shape ``(batch, num_modalities, d_model)``
+        Stacked modality embeddings (with optional modality embeddings added).
     """
 
     def __init__(
@@ -62,12 +67,6 @@ class BottleneckLatentBlock(nn.Module):
         modality_tokens: torch.Tensor,
         return_attn: bool = False,
     ):
-        """
-        latents:         [B, K, D]
-        modality_tokens: [B, M, D]
-        """
-
-        # Cross-attention: latents gather information from modality tokens.
         q = self.cross_attn_norm(latents)
         kv = self.modality_norm(modality_tokens)
 
@@ -81,7 +80,6 @@ class BottleneckLatentBlock(nn.Module):
 
         latents = latents + cross_out
 
-        # Self-attention between latent tokens.
         qkv = self.self_attn_norm(latents)
 
         self_out, self_attn_weights = self.self_attn(
@@ -93,8 +91,6 @@ class BottleneckLatentBlock(nn.Module):
         )
 
         latents = latents + self_out
-
-        # Feed-forward.
         latents = latents + self.ffn(self.ffn_norm(latents))
 
         if return_attn:
@@ -107,26 +103,23 @@ class BottleneckLatentBlock(nn.Module):
 
 
 class BottleneckRepresentationEncoder(nn.Module):
-    """
-    Bottleneck Representation Encoder.
-
-    Input:
-        modality embeddings:
-            h_raw, h_stats, h_gaf, h_stft
-            each [B, D]
+    """Fuse modality embeddings through learnable latent bottleneck tokens.
 
     Steps:
-        1. stack modality embeddings -> [B, M, D]
-        2. add learnable modality embeddings
-        3. create learnable latent tokens -> [B, K, D]
-        4. latent tokens cross-attend to modality tokens
-        5. latent tokens self-attend
-        6. pool latent tokens into one representation
 
-    pooling:
-        "mean"   -> latents.mean(dim=1)
-        "cls"    -> latents[:, 0]
-        "concat" -> projection(flatten(latents))
+    1. Stack ``n_modalities`` embeddings → modality tokens ``(B, M, D)``.
+    2. Add learnable modality-type embeddings.
+    3. Initialize ``num_latents`` learnable latent tokens ``(B, K, D)``.
+    4. Apply :class:`BottleneckLatentBlock` layers (cross-attn + self-attn).
+    5. Pool latents into a single vector ``(B, D)``.
+
+    Pooling modes: ``"mean"`` (default), ``"cls"`` (first token),
+    ``"concat"`` (flatten + projection).
+
+    Forward
+    -------
+    *modality_embeddings : Tensor
+        One tensor per modality, each of shape ``(batch, d_model)``.
     """
 
     def __init__(
@@ -168,14 +161,10 @@ class BottleneckRepresentationEncoder(nn.Module):
         self.num_latents = num_latents
         self.pooling = pooling
 
-        # Learnable modality embeddings:
-        # RAW, STATS, GAF, STFT, ...
         self.modality_embedding = nn.Parameter(
             torch.zeros(1, n_modalities, d_model)
         )
 
-        # Learnable latent bottleneck tokens:
-        # Z1, Z2, ..., ZK
         self.latent_tokens = nn.Parameter(
             torch.randn(num_latents, d_model) * latent_init_std
         )
@@ -216,7 +205,6 @@ class BottleneckRepresentationEncoder(nn.Module):
                 f"got {len(modality_embeddings)}."
             )
 
-        # [B, M, D]
         modality_tokens = torch.stack(modality_embeddings, dim=1)
 
         batch_size, n_modalities, d_model = modality_tokens.shape
@@ -231,11 +219,7 @@ class BottleneckRepresentationEncoder(nn.Module):
                 f"Expected d_model={self.d_model}, got {d_model}."
             )
 
-        # Add modality identity embeddings.
-        # [B, M, D]
         modality_tokens = modality_tokens + self.modality_embedding
-
-        # [B, K, D]
         latents = self.latent_tokens.unsqueeze(0).expand(batch_size, -1, -1)
 
         all_attn = []
@@ -255,22 +239,16 @@ class BottleneckRepresentationEncoder(nn.Module):
                     return_attn=False,
                 )
 
-        # [B, K, D]
         latents = self.final_norm(latents)
 
         if self.pooling == "mean":
-            # [B, D]
             h_final = latents.mean(dim=1)
 
         elif self.pooling == "cls":
-            # [B, D]
             h_final = latents[:, 0]
 
         elif self.pooling == "concat":
-            # [B, K * D]
             h_flat = latents.reshape(batch_size, self.num_latents * self.d_model)
-
-            # [B, D]
             h_final = self.concat_projection(h_flat)
 
         else:

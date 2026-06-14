@@ -1,41 +1,35 @@
+"""Configurable multimodal classifier with softmax-gated fusion."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
-from src.models.head.classification import ClassificationHead
 from src.models.fusion.gated_fusion import MultiModalGatedFusion
+from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
 
 
 class FlexibleGatedClassifier(nn.Module):
-    """
-    Flexible multimodal gated classifier.
+    """Multimodal classifier with learned softmax gates over modalities.
 
-    Every selected modality is encoded into h_i ∈ R^D.
-    Then MultiModalGatedFusion learns softmax gates over modality embeddings.
+    Each modality is encoded to ``d_model``; :class:`MultiModalGatedFusion`
+    learns sample-wise weights and returns their weighted sum.
 
-    Example:
+    Example::
+
         model = FlexibleGatedClassifier(
-            modalities=("raw", "stats", "gaf", "mtf", "stft"),
-            num_classes=10,
+            modalities=("raw", "stats", "gaf"),
+            num_classes=4,
             d_model=128,
             encoder_kwargs={
                 "raw": {"in_channels": 1},
                 "stats": {"in_features": 32},
                 "gaf": {"in_channels": 1},
-                "mtf": {"in_channels": 1},
-                "stft": {"in_channels": 1},
             },
         )
-
-        logits = model({
-            "raw": x_raw,
-            "stats": x_stats,
-            "gaf": x_gaf,
-            "mtf": x_mtf,
-            "stft": x_stft,
-        })
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
+        logits, gates = model(inputs, return_gates=True)
     """
 
     def __init__(

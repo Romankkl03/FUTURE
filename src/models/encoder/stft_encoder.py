@@ -1,8 +1,12 @@
+"""2D-CNN encoder for STFT spectrograms."""
+
 import torch
 import torch.nn as nn
 
 
 class STFTConvBlock(nn.Module):
+    """2D convolution block: Conv2d → BatchNorm → GELU → MaxPool2d → Dropout2d."""
+
     def __init__(
         self,
         in_channels: int,
@@ -23,14 +27,16 @@ class STFTConvBlock(nn.Module):
 
 
 class STFTEncoder(nn.Module):
-    """
-    CNN encoder for STFT spectrograms.
+    """Encode STFT spectrograms into a fixed-size embedding.
 
-    Input:
-        x_stft: [batch, channels, frequency_bins, frames]
+    Architecture: stacked :class:`STFTConvBlock` layers → global average pool
+    → linear projection to ``d_model``.
 
-    Output:
-        h_stft: [batch, d_model]
+    Forward
+    -------
+    x_stft : Tensor, shape ``(batch, channels, frequency_bins, frames)``
+        STFT image tensor (typically ``channels=1``).
+    Returns ``h_stft`` of shape ``(batch, d_model)``.
     """
 
     def __init__(

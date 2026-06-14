@@ -1,3 +1,5 @@
+"""Feature-wise Linear Modulation (FiLM) fusion with raw as the main stream."""
+
 import torch
 import torch.nn as nn
 
@@ -7,24 +9,26 @@ from src.models.encoder.stats_encoder import StatisticalEncoder
 from src.models.encoder.stft_encoder import STFTEncoder
 from src.models.head.classification import ClassificationHead
 
-# FiLM: Feature-wise Linear Modulation
-# Formulation: h_final = h_raw * (1 + gamma) + beta
 
 class FiLMFusion(nn.Module):
-    """
-    FiLM conditioning fusion.
+    """Modulate a raw embedding with context-derived scale and shift.
 
-    h_raw: [batch, d_model]
-    context embeddings: each [batch, d_model]
+    Context embeddings are concatenated, projected, and mapped to FiLM
+    parameters ``gamma`` and ``beta``. The fused representation is:
 
-    Logic:
-        h_context = concat(context_embeddings)
-        h_context = context_projector(h_context)
+    ``h_final = h_raw * (1 + gamma) + beta``
 
-        gamma = gamma_mlp(h_context)
-        beta = beta_mlp(h_context)
+    With ``gamma=0`` and ``beta=0`` the output equals ``h_raw``, giving a
+    stable raw-centered baseline at initialization.
 
-        h_final = h_raw * (1 + gamma) + beta
+    Forward
+    -------
+    h_raw : Tensor, shape ``(batch, d_model)``
+        Main (raw) embedding to be modulated.
+    *context_embeddings : Tensor
+        ``n_context_inputs`` tensors, each of shape ``(batch, d_model)``.
+    return_aux : bool
+        If ``True``, return a dict with ``h_final``, ``gamma``, ``beta``, etc.
     """
 
     def __init__(
@@ -90,19 +94,11 @@ class FiLMFusion(nn.Module):
                 f"got {len(context_embeddings)}."
             )
 
-        # [batch, n_context_inputs * d_model]
         h_context_cat = torch.cat(context_embeddings, dim=-1)
-
-        # [batch, d_model]
         h_context = self.context_projector(h_context_cat)
 
-        # Tanh keeps gamma/beta bounded.
-        # gamma, beta: [batch, d_model]
         gamma = self.gamma_scale * self.gamma_mlp(h_context)
         beta = self.beta_scale * self.beta_mlp(h_context)
-
-        # Stable FiLM:
-        # gamma = 0, beta = 0 => h_final = h_raw
         h_final = h_raw * (1.0 + gamma) + beta
 
         if return_aux:
@@ -118,13 +114,18 @@ class FiLMFusion(nn.Module):
 
 
 class RawFiLMStatsGAFSTFTClassifier(nn.Module):
-    """
-    Raw-centered FiLM classifier.
+    """End-to-end raw-centered FiLM classifier with fixed modality encoders.
 
-    raw is the main representation.
-    stats / GAF / STFT generate FiLM parameters gamma and beta.
+    Encodes raw time series as the main stream and uses stats / GAF / STFT
+    (configurable) to produce FiLM conditioning. Prefer
+    :class:`~src.models.multimodals.film_fusion_clf.FlexibleFiLMClassifier`
+    when modality sets should be chosen at runtime.
 
-    No MTF by default.
+    Forward
+    -------
+    x_raw, x_stat, x_gaf, x_stft : Tensor | None
+        Modality inputs; only tensors required by ``context_modalities``
+        must be provided.
     """
 
     SUPPORTED_CONTEXT_MODALITIES = {"stats", "gaf", "stft"}
@@ -259,8 +260,7 @@ class RawFiLMStatsGAFSTFTClassifier(nn.Module):
                 *context_embeddings,
                 return_aux=True,
             )
-            logits = self.head(aux["h_final"])
-            aux["logits"] = logits
+            aux["logits"] = self.head(aux["h_final"])
             return aux
 
         h_final = self.film(

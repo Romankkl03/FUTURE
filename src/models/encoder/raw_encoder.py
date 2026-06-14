@@ -1,12 +1,11 @@
+"""Encoders for raw multivariate time series."""
+
 import torch
 import torch.nn as nn
 
 
 class ConvBlock1D(nn.Module):
-    """
-    Базовый 1D CNN блок:
-    Conv1d → BatchNorm → GELU → Dropout
-    """
+    """1D convolution block: Conv1d → BatchNorm → GELU → Dropout."""
 
     def __init__(
         self,
@@ -39,14 +38,16 @@ class ConvBlock1D(nn.Module):
 
 
 class RawTimeSeriesEncoder(nn.Module):
-    """
-    Raw time series encoder.
+    """Encode raw time series into a fixed-size embedding.
 
-    Input:
-        x: [batch, channels, time]
+    Architecture: stacked :class:`ConvBlock1D` layers → global average pool
+    over time → linear projection to ``d_model``.
 
-    Output:
-        h_raw: [batch, d_model]
+    Forward
+    -------
+    x : Tensor, shape ``(batch, channels, time)``
+        Multivariate time series.
+    Returns ``h_raw`` of shape ``(batch, d_model)``.
     """
 
     def __init__(
@@ -86,20 +87,6 @@ class RawTimeSeriesEncoder(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        x: [batch, channels, time]
-        """
-
         z = self.cnn(x)
-        # z: [batch, hidden_channels, time]
-
-        z = self.global_pool(z)
-        # z: [batch, hidden_channels, 1]
-
-        z = z.squeeze(-1)
-        # z: [batch, hidden_channels]
-
-        h_raw = self.projection(z)
-        # h_raw: [batch, d_model]
-
-        return h_raw
+        z = self.global_pool(z).squeeze(-1)
+        return self.projection(z)

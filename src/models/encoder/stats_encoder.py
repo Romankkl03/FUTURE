@@ -1,12 +1,11 @@
+"""Encoders for hand-crafted statistical feature vectors."""
+
 import torch
 import torch.nn as nn
 
 
 class MLPBlock(nn.Module):
-    """
-    Базовый MLP блок:
-    Linear -> LayerNorm -> GELU -> Dropout
-    """
+    """MLP block: Linear → LayerNorm → GELU → Dropout."""
 
     def __init__(
         self,
@@ -28,14 +27,16 @@ class MLPBlock(nn.Module):
 
 
 class StatisticalEncoder(nn.Module):
-    """
-    Encoder для статистических признаков.
+    """Encode tabular statistical features into a fixed-size embedding.
 
-    Input:
-        x_stat: [batch, num_features]
+    Architecture: input LayerNorm → stacked :class:`MLPBlock` layers →
+    linear projection to ``d_model``.
 
-    Output:
-        h_stat: [batch, d_model]
+    Forward
+    -------
+    x_stat : Tensor, shape ``(batch, num_features)``
+        Per-sample statistical descriptors.
+    Returns ``h_stat`` of shape ``(batch, d_model)``.
     """
 
     def __init__(
@@ -71,7 +72,4 @@ class StatisticalEncoder(nn.Module):
         self.encoder = nn.Sequential(*layers)
 
     def forward(self, x_stat: torch.Tensor) -> torch.Tensor:
-        """
-        x_stat: [batch, num_features]
-        """
         return self.encoder(x_stat)

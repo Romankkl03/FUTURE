@@ -1,42 +1,34 @@
+"""Configurable raw-centered residual fusion classifier."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
-from src.models.head.classification import ClassificationHead
 from src.models.fusion.raw_centered_residual_fusion import RawCenteredResidualFusion
+from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
 
 
 class FlexibleRawCenteredResidualClassifier(nn.Module):
-    """
-    Flexible raw-centered residual classifier.
+    """Raw-centered classifier with gated context residual.
 
-    Raw is the main representation.
-    Context modalities produce residual correction.
+    Raw stays on the main path; context modalities predict a correction
+    ``delta`` gated by ``alpha``: ``h_final = h_raw + alpha * delta``.
 
-    h_final = h_raw + alpha * delta(context)
+    Example::
 
-    Example:
         model = FlexibleRawCenteredResidualClassifier(
-            raw_modality="raw",
-            context_modalities=("stats", "gaf", "stft"),
-            num_classes=10,
+            context_modalities=("stats", "gaf"),
+            num_classes=4,
             d_model=128,
             encoder_kwargs={
                 "raw": {"in_channels": 1},
                 "stats": {"in_features": 32},
                 "gaf": {"in_channels": 1},
-                "stft": {"in_channels": 1},
             },
         )
-
-        logits = model({
-            "raw": x_raw,
-            "stats": x_stats,
-            "gaf": x_gaf,
-            "stft": x_stft,
-        })
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
     """
 
     def __init__(
@@ -83,7 +75,7 @@ class FlexibleRawCenteredResidualClassifier(nn.Module):
 
             if name not in encoder_kwargs:
                 raise ValueError(
-                    f"Missing encoder config for modality '{name}'."
+                    f"Missing encoder config for modality '{name}'"
                 )
 
             builder = ENCODER_REGISTRY[name]

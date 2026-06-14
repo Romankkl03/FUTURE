@@ -1,3 +1,5 @@
+"""Raw-conditioned bottleneck: raw sets latent queries, context supplies keys/values."""
+
 import torch
 import torch.nn as nn
 
@@ -5,20 +7,24 @@ from src.models.fusion.bottleneck_fusion import BottleneckLatentBlock
 
 
 class RawConditionedBottleneckRepresentationEncoder(nn.Module):
-    """
-    Raw-conditioned bottleneck representation encoder.
+    """Bottleneck fusion where raw conditions latent tokens, not modality tokens.
 
-    Difference from BottleneckRepresentationEncoder:
-        ordinary:
-            latents = learnable_latents
+    Compared to :class:`~src.models.fusion.bottleneck_fusion.BottleneckRepresentationEncoder`:
 
-        raw-conditioned:
-            raw_condition = raw_to_latents(h_raw)
-            latents = learnable_latents + raw_condition
+    - **Ordinary bottleneck** — all modalities (including raw) are stacked as
+      keys/values; latents are purely learnable.
+    - **Raw-conditioned** — only *context* modalities form keys/values; raw
+      embedding initializes the latent queries via ``raw_to_latents(h_raw)``.
 
-    Cross-attention goes only to context tokens.
-    RAW does not appear as a modality token.
-    RAW controls the initial state of latent tokens.
+    This keeps raw on a separate highway while letting context modalities
+    interact through the bottleneck.
+
+    Forward
+    -------
+    h_raw : Tensor, shape ``(batch, d_model)``
+        Raw embedding used to condition latent initialization.
+    *context_embeddings : Tensor
+        ``n_context_modalities`` tensors, each of shape ``(batch, d_model)``.
     """
 
     def __init__(

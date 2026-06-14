@@ -1,34 +1,27 @@
+"""Raw-centered residual fusion: keep raw as the main representation."""
+
 import torch
 import torch.nn as nn
 
 
 class RawCenteredResidualFusion(nn.Module):
-    """
-    Main idea: make the model invariant to the context embeddings. 
-    Where context embeddings are the additional inputs to the model (e.g. GAF, stats, etc.).
+    """Add a gated context correction on top of the raw embedding.
 
-    Formulation:
-    h_final = h_raw + alpha * delta
+    Context embeddings are projected and combined with ``h_raw`` to predict
+    a residual ``delta`` and gate ``alpha``:
 
-    alpha_is_vector: bool = True:
-     If True, alpha is a vector of the same dimension as h_raw. 
-     It's flexible to learn the importance of each dimension.
+    ``h_final = h_raw + alpha * delta``
 
-    Raw-centered residual gated fusion.
+    When ``alpha → 0`` the output stays close to ``h_raw``. Set
+    ``alpha_is_vector=True`` (default) for per-dimension gating, or
+    ``False`` for a single scalar gate.
 
-    h_raw: [batch, d_model]
-    context embeddings: each [batch, d_model]
-
-    Logic:
-        h_ctx = concat(context_embeddings)
-        h_ctx = context_projector(h_ctx)
-
-        z = concat(h_raw, h_ctx)
-
-        delta = delta_mlp(z)
-        alpha = sigmoid(alpha_mlp(z))
-
-        h_final = h_raw + alpha * delta
+    Forward
+    -------
+    h_raw : Tensor, shape ``(batch, d_model)``
+        Main raw embedding (residual highway).
+    *context_embeddings : Tensor
+        ``n_context_inputs`` tensors, each of shape ``(batch, d_model)``.
     """
 
     def __init__(
@@ -87,24 +80,12 @@ class RawCenteredResidualFusion(nn.Module):
                 f"got {len(context_embeddings)}."
             )
 
-        # [batch, n_context_inputs * d_model]
         h_context_cat = torch.cat(context_embeddings, dim=-1)
-
-        # [batch, d_model]
         h_context = self.context_projector(h_context_cat)
-
-        # [batch, 2 * d_model]
         fusion_input = torch.cat([h_raw, h_context], dim=-1)
 
-        # [batch, d_model]
         delta = self.delta_mlp(fusion_input)
-
-        # alpha:
-        #   vector mode: [batch, d_model]
-        #   scalar mode: [batch, 1]
         alpha = self.alpha_mlp(fusion_input)
-
-        # [batch, d_model]
         h_final = h_raw + alpha * delta
 
         if return_aux:

@@ -1,34 +1,40 @@
+"""Raw-residual bottleneck: bottleneck over all modalities, residual on raw."""
+
 from collections.abc import Mapping, Sequence
 
 import torch
 import torch.nn as nn
 
+from src.models.fusion.bottleneck_fusion import BottleneckRepresentationEncoder
 from src.models.head.classification import ClassificationHead
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
-from src.models.fusion.bottleneck_fusion import BottleneckRepresentationEncoder
 
 
 class FlexibleRawResidualBottleneckClassifier(nn.Module):
-    """
-    Flexible raw-residual bottleneck classifier.
+    """Raw-centered classifier with full-modality bottleneck residual.
 
-    Bottleneck sees RAW + context tokens.
+    Architecture::
 
-    Architecture:
-        h_raw = encoder_raw(x_raw)
-        h_context_i = encoder_i(x_i)
+        h_raw, h_ctx_* = encoders(x)
+        h_bottleneck = Bottleneck(h_raw, h_ctx_1, ...)
+        h_final = h_raw + alpha * delta(h_bottleneck)
 
-        h_bottleneck = Bottleneck(
-            h_raw,
-            h_context_1,
-            ...
+    Raw and all context modalities attend through the bottleneck; the output
+    is added back to ``h_raw`` via a learned gate.
+
+    Example::
+
+        model = FlexibleRawResidualBottleneckClassifier(
+            context_modalities=("stats", "gaf"),
+            num_classes=4,
+            d_model=128,
+            encoder_kwargs={
+                "raw": {"in_channels": 1},
+                "stats": {"in_features": 32},
+                "gaf": {"in_channels": 1},
+            },
         )
-
-        delta = delta_proj(h_bottleneck)
-        alpha = sigmoid(alpha_mlp(concat(h_raw, h_bottleneck)))
-
-        h_final = h_raw + alpha * delta
-        logits = head(h_final)
+        logits = model({"raw": x_raw, "stats": x_stats, "gaf": x_gaf})
     """
 
     def __init__(
@@ -121,6 +127,7 @@ class FlexibleRawResidualBottleneckClassifier(nn.Module):
         self,
         inputs: Mapping[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
+        """Encode each modality input to ``(batch, d_model)``."""
         embeddings = {}
 
         for name in self.modality_order:

@@ -1,3 +1,5 @@
+"""Neural encoders, fusion modules, and multimodal classifiers for time series."""
+
 from src.models.common.training import single_input_batch, train_with_batch_adapter, two_input_batch
 from src.models.encoder.gaf_encoder import GAFEncoder
 from src.models.encoder.mtf_encoder import MTFEncoder
