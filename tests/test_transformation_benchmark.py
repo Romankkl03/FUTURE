@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from experiments.benchmark_transformations import (
+from experiments.image_transformations_benchmark import (
     N_RUNS,
     _make_data,
     build_cases,

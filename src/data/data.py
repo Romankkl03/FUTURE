@@ -4,7 +4,7 @@ from typing import Any
 
 import torch
 
-from src.statistical.quantile_extractor import (
+from src.representations.statistical.quantile_extractor import (
     STAT_METHODS_GLOBAL_TORCH,
     STAT_METHODS_TORCH,
     TorchQuantileExtractor,

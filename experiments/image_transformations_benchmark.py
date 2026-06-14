@@ -5,9 +5,12 @@ Reference libraries:
   - MTF: pyts.image.MarkovTransitionField
   - STFT: scipy.signal.stft (per-sample loop)
 
-Each method is timed over ``N_RUNS`` repetitions. Outputs:
-  - boxplot PNG with reference mean time and custom-implementation distribution
-  - CSV summary table (time, speedup, RMSE)
+Each method is timed over ``N_RUNS`` repetitions. Outputs under
+``results/image_transformations_benchmarks/``:
+
+  - ``boxplot.png`` — reference mean time vs custom-implementation distribution
+  - ``summary.csv`` — per-method time, speedup, RMSE
+  - ``timings.csv`` — raw per-run timings
 """
 
 from __future__ import annotations
@@ -25,14 +28,14 @@ import torch
 from pyts.image import GramianAngularField, MarkovTransitionField
 from scipy import signal
 
-from src.image_transformation.methods.gaf_transformation import GAF
-from src.image_transformation.methods.mtf_transformation import MTF
-from src.image_transformation.methods.stft_transformation import STFTSpectrogram
+from src.representations.image_transformation.methods.gaf_transformation import GAF
+from src.representations.image_transformation.methods.mtf_transformation import MTF
+from src.representations.image_transformation.methods.stft_transformation import STFTSpectrogram
 
 
 N_RUNS = 10
 N_WARMUP = 2
-DEFAULT_OUTPUT_DIR = Path("results/benchmarks")
+DEFAULT_OUTPUT_DIR = Path("results/image_transformations_benchmarks")
 
 
 @dataclass(frozen=True)
@@ -346,9 +349,9 @@ def main() -> None:
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
-    summary_path = output_dir / "transformation_benchmark_summary.csv"
-    timing_path = output_dir / "transformation_benchmark_timings.csv"
-    plot_path = output_dir / "transformation_benchmark_boxplot.png"
+    summary_path = output_dir / "summary.csv"
+    timing_path = output_dir / "timings.csv"
+    plot_path = output_dir / "boxplot.png"
 
     summary.to_csv(summary_path, index=False)
     timing.to_csv(timing_path, index=False)

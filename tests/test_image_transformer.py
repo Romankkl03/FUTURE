@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from src.image_transformation.image_transformer import ImageTransformer
-from src.image_transformation.types import ImageTransformationType
+from src.representations.image_transformation.image_transformer import ImageTransformer
+from src.representations.image_transformation.types import ImageTransformationType
 
 
 @pytest.fixture

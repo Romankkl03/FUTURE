@@ -7,8 +7,8 @@ from typing import Any
 
 import torch
 
-from src.statistical.hankel import HankelMatrix
-from src.statistical.stat_features import (
+from src.representations.statistical.hankel import HankelMatrix
+from src.representations.statistical.stat_features import (
     autocorrelation_torch,
     ben_corr_torch,
     crest_factor_torch,

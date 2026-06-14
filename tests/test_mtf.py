@@ -2,7 +2,7 @@ import pytest
 import torch
 import numpy as np
 from pyts.image import MarkovTransitionField
-from src.image_transformation.methods.mtf_transformation import MTF
+from src.representations.image_transformation.methods.mtf_transformation import MTF
 
 
 @pytest.fixture

@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import torch
 
-from src.image_transformation.methods.stft_transformation import STFTSpectrogram
+from src.representations.image_transformation.methods.stft_transformation import STFTSpectrogram
 
 
 @pytest.fixture

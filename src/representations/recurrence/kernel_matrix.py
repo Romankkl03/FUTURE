@@ -1,6 +1,6 @@
 import torch
 
-from src.recurrence.pdist import torch_pdist
+from src.representations.recurrence.pdist import torch_pdist
 
 
 def _as_2d_time_series(time_series: torch.Tensor) -> torch.Tensor:

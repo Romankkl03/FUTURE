@@ -24,8 +24,8 @@ from src.data import (
     to_cnn_images,
     transform_images_batched,
 )
-from src.image_transformation.methods.gaf_transformation import GAF
-from src.image_transformation.methods.stft_transformation import STFTSpectrogram
+from src.representations.image_transformation.methods.gaf_transformation import GAF
+from src.representations.image_transformation.methods.stft_transformation import STFTSpectrogram
 from src.metrics.metrics import compute_classification_metrics
 from src.models.head.classification import ClassificationHead
 from src.models.multimodals.bottleneck_fusion_clf import FlexibleBottleneckClassifier
@@ -41,7 +41,7 @@ from src.models.multimodals.raw_conditioned_bottleneck_clf import (
 from src.models.multimodals.raw_residual_bottleneck_clf import FlexibleRawResidualBottleneckClassifier
 from src.models.multimodals.raw_residual_centered_fusion_clf import FlexibleRawCenteredResidualClassifier
 from src.models.registry.encoder_registry import ENCODER_REGISTRY
-from src.statistical.quantile_extractor import TorchQuantileExtractor
+from src.representations.statistical.quantile_extractor import TorchQuantileExtractor
 from src.tools import get_device, per_sample_minmax_scale, per_sample_z_normalize, set_seed
 
 

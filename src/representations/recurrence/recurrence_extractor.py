@@ -3,9 +3,9 @@ from typing import Any
 
 import torch
 
-from src.recurrence.kernel_matrix import TorchTSTransformer
-from src.recurrence.sequences import RecurrenceFeatureExtractorTorch
-from src.statistical.hankel import HankelMatrix
+from src.representations.recurrence.kernel_matrix import TorchTSTransformer
+from src.representations.recurrence.sequences import RecurrenceFeatureExtractorTorch
+from src.representations.statistical.hankel import HankelMatrix
 
 
 RECURRENCE_FEATURE_NAMES = [

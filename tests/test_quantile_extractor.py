@@ -1,9 +1,9 @@
-"""Tests for :class:`~statistical.quantile_extractor.TorchQuantileExtractor`."""
+"""Tests for :class:`~src.representations.statistical.quantile_extractor.TorchQuantileExtractor`."""
 
 import pytest
 import torch
 
-from src.statistical.quantile_extractor import (
+from src.representations.statistical.quantile_extractor import (
     STAT_METHODS_GLOBAL_TORCH,
     STAT_METHODS_TORCH,
     TorchQuantileExtractor,

@@ -3,7 +3,7 @@ import pytest
 import torch
 from pyts.image import GramianAngularField
 
-from src.image_transformation.methods.gaf_transformation import GAF
+from src.representations.image_transformation.methods.gaf_transformation import GAF
 
 
 @pytest.fixture
