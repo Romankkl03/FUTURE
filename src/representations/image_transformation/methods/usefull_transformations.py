@@ -217,7 +217,7 @@ def _validate_kbins_params(n_bins: int, strategy: str) -> None:
         )
 
 
-def linspace_per_row(
+def _linspace_per_row(
     start: torch.Tensor,
     end: torch.Tensor,
     steps: int,
@@ -251,7 +251,7 @@ def linspace_per_row(
     return start[:, None] + (end - start)[:, None] * t[None, :]
 
 
-def uniform_bins_torch(X: torch.Tensor, n_bins: int) -> torch.Tensor:
+def _uniform_bins_torch(X: torch.Tensor, n_bins: int) -> torch.Tensor:
     """Compute uniform bin edges per sample.
 
     Equivalent to the original `_uniform_bins`, but vectorized in torch.
@@ -270,11 +270,11 @@ def uniform_bins_torch(X: torch.Tensor, n_bins: int) -> torch.Tensor:
     sample_min = X.min(dim=1).values
     sample_max = X.max(dim=1).values
     # Need n_bins + 1 points, then drop first and last -> internal edges
-    edges = linspace_per_row(sample_min, sample_max, steps=n_bins + 1)
+    edges = _linspace_per_row(sample_min, sample_max, steps=n_bins + 1)
     return edges[:, 1:-1]
 
 
-def normal_bins_torch(
+def _normal_bins_torch(
     n_bins: int,
     *,
     device: torch.device,
@@ -295,7 +295,7 @@ def normal_bins_torch(
     return normal.icdf(probs)
 
 
-def pad_rows_with_nan(rows: list[torch.Tensor]) -> torch.Tensor:
+def _pad_rows_with_nan(rows: list[torch.Tensor]) -> torch.Tensor:
     """Pad a list of 1D tensors to a 2D tensor with NaN on the right.
 
     Parameters
@@ -322,7 +322,7 @@ def pad_rows_with_nan(rows: list[torch.Tensor]) -> torch.Tensor:
     return out
 
 
-def quantile_bins_torch(
+def _quantile_bins_torch(
     X: torch.Tensor,
     n_bins: int,
     *,
@@ -384,10 +384,10 @@ def quantile_bins_torch(
         )
 
     rows = [edges[i][keep[i]] for i in range(edges.shape[0])]
-    return pad_rows_with_nan(rows)
+    return _pad_rows_with_nan(rows)
 
 
-def digitize_global_bins_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
+def _digitize_global_bins_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
     """Digitize using the same bin edges for all samples.
 
     Parameters
@@ -405,7 +405,7 @@ def digitize_global_bins_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Ten
     return torch.bucketize(X, bins, right=False)
 
 
-def digitize_per_sample_bins_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
+def _digitize_per_sample_bins_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
     """Digitize using per-sample bin edges.
 
     Supports NaN-padded bin matrices.
@@ -435,7 +435,7 @@ def digitize_per_sample_bins_torch(X: torch.Tensor, bins: torch.Tensor) -> torch
     return (bins[:, None, :] < X[:, :, None]).sum(dim=-1).long()
 
 
-def digitize_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
+def _digitize_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
     """Digitize X according to bin edges.
 
     Parameters
@@ -453,19 +453,19 @@ def digitize_torch(X: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
         Shape (n_samples, n_timestamps), dtype=torch.long
     """
     if bins.ndim == 1:
-        return digitize_global_bins_torch(X, bins)
+        return _digitize_global_bins_torch(X, bins)
     if bins.ndim == 2:
         if bins.shape[0] != X.shape[0]:
             raise ValueError(
                 "For per-sample bins, bins.shape[0] must equal X.shape[0]. "
                 f"Got bins.shape={tuple(bins.shape)}, X.shape={tuple(X.shape)}"
             )
-        return digitize_per_sample_bins_torch(X, bins)
+        return _digitize_per_sample_bins_torch(X, bins)
 
     raise ValueError(f"bins must be 1D or 2D, got shape={tuple(bins.shape)}")
 
 
-def compute_bins_torch(
+def _compute_bins_torch(
     X: torch.Tensor,
     n_bins: int,
     strategy: Strategy = "quantile",
@@ -493,12 +493,12 @@ def compute_bins_torch(
     _validate_kbins_params(n_bins, strategy)
 
     if strategy == "normal":
-        return normal_bins_torch(n_bins, device=X.device, dtype=X.dtype)
+        return _normal_bins_torch(n_bins, device=X.device, dtype=X.dtype)
 
     if strategy == "uniform":
-        return uniform_bins_torch(X, n_bins)
+        return _uniform_bins_torch(X, n_bins)
 
-    return quantile_bins_torch(X, n_bins, raise_warning=raise_warning)
+    return _quantile_bins_torch(X, n_bins, raise_warning=raise_warning)
 
 
 def kbins_discretize_torch(
@@ -530,16 +530,14 @@ def kbins_discretize_torch(
     bins : torch.Tensor, optional
         Computed bin edges.
     """
-    bins = compute_bins_torch(
+    bins = _compute_bins_torch(
         X,
         n_bins=n_bins,
         strategy=strategy,
         raise_warning=raise_warning,
     )
-    X_binned = digitize_torch(X, bins)
+    X_binned = _digitize_torch(X, bins)
 
     if return_bins:
         return X_binned, bins
     return X_binned
-
-

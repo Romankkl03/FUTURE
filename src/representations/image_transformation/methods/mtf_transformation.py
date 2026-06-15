@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 import torch
 
-from ..usefull_transformations import kbins_discretize_torch, segmentation_torch
+from .usefull_transformations import kbins_discretize_torch, segmentation_torch
 
 
 class MTF:

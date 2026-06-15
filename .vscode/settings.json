@@ -1,0 +1,7 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "jupyter.runStartupCommands": [
+    "import sys\nfrom pathlib import Path\nfor _p in [Path.cwd(), *Path.cwd().parents]:\n    _src = _p / 'src'\n    if (_p / 'pyproject.toml').is_file() and _src.is_dir():\n        _s = str(_src)\n        if _s not in sys.path:\n            sys.path.insert(0, _s)\n        break"
+  ]
+}

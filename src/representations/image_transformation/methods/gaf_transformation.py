@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Type
 
 import torch
 
-from ..usefull_transformations import MinMaxScalerTorch, PAA, segmentation_torch
+from .usefull_transformations import MinMaxScalerTorch, PAA, segmentation_torch
 
 TRANSFORMER_REGISTRY: Dict[str, Type] = {}
 
@@ -70,16 +70,17 @@ class GAF:
             torch.Tensor: GAF-transformed tensor of shape (batch, image_size,
                 image_size).
         """
-        self.window_size, self.image_size = self._check_params(X.shape[1])
-        paa = PAA(self.window_size, self.image_size, self.overlapping)
+        window_size, image_size = self._check_params(X.shape[1])
+        paa = PAA(window_size, image_size, self.overlapping)
         X_paa = paa.transform(X)
         # X_paa = segmentation_torch(X.shape[-1], self.window_size, self.overlapping, self.image_size)
         if self.sample_range is None:
             X_min, X_max = torch.min(X_paa), torch.max(X_paa)
-            if (X_min < -1) or (X_max > 1):
+            eps = 1e-5
+            if (X_min < -1 - eps) or (X_max > 1 + eps):
                 raise ValueError("If 'sample_range' is None, all the values "
                                  "of X must be between -1 and 1.")
-            X_cos = X_paa
+            X_cos = X_paa.clamp(-1.0, 1.0)
         else:
             X_cos = MinMaxScalerTorch(X_paa, self.sample_range)
         X_sin = torch.sqrt(torch.clamp(1 - X_cos**2, min=0, max=1))
@@ -132,7 +133,7 @@ class GAF:
         cos_sin = X_cos.unsqueeze(2) * X_sin.unsqueeze(1)
         return sin_cos - cos_sin
 
-    def _check_params(self, n_timestamps: int) -> int:
+    def _check_params(self, n_timestamps: int) -> tuple[int, int]:
         """
         Validates and computes the window size and image size for PAA.
 
@@ -142,20 +143,44 @@ class GAF:
         Returns:
             tuple: A tuple containing the computed window size and image size.
         """
-        if self.window_size is not None:
-            image_size = self.image_size
-        else:
-            if not (0 < self.image_size <= 1.):
+        if self.method not in ["s", "summation", "d", "difference"]:
+            raise ValueError(
+                "'method' must be one of 'summation', 's', 'difference' or 'd'."
+            )
+
+        if self.window_size is None:
+            if isinstance(self.image_size, int):
+                image_size = self.image_size
+                if image_size < 1 or image_size > n_timestamps:
+                    raise ValueError(
+                        "If 'image_size' is an integer, it must be >= 1 "
+                        "and <= n_timestamps."
+                    )
+            elif isinstance(self.image_size, float):
+                if not (0 < self.image_size <= 1.):
+                    raise ValueError(
+                        "If 'image_size' is a float, it must be greater "
+                        "than 0 and lower than or equal to 1 (got {0})."
+                        .format(self.image_size)
+                    )
+                image_size = math.ceil(self.image_size * n_timestamps)
+            else:
                 raise ValueError(
-                    "If 'image_size' is a float, it must be greater "
-                    "than 0 and lower than or equal to 1 (got {0})."
-                    .format(self.image_size)
+                    "'image_size' must be either an integer or a float."
                 )
-            image_size = math.ceil(self.image_size * n_timestamps)
+
             window_size, remainder = divmod(n_timestamps, image_size)
-        if remainder != 0:
-            window_size += 1
-        if self.method not in ['summation', 'difference']:
-            raise ValueError("'method' must be either 'summation'"
-                             "'difference' or 'd'.")
+            if remainder != 0:
+                window_size += 1
+        else:
+            if not isinstance(self.window_size, int):
+                raise TypeError("'window_size' must be an integer.")
+            if self.window_size < 1 or self.window_size > n_timestamps:
+                raise ValueError("'window_size' must be >= 1 and <= n_timestamps.")
+
+            window_size = self.window_size
+            image_size, remainder = divmod(n_timestamps, window_size)
+            if remainder != 0:
+                image_size += 1
+
         return window_size, image_size
